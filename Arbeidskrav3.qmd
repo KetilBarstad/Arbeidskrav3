@@ -1,26 +1,19 @@
 ---
 title: "Arbeidskrav 3"
+forfattere: Ketil B., Laurits H., Herman E. og Theodor S.
 format: html
 editor: visual
+  toc:
 ---
 
-## Quarto
+# Innhold
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+## Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)
 
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Sammenheng mellom total og kjønn
 
 ```{r}
-1 + 1
+
 ```
 
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
