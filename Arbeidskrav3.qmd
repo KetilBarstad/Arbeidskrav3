@@ -9,6 +9,8 @@ format:
     toc-title: "Innhold"
     toc-depth: 4
     number-sections: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Beskrive sammenhenger
@@ -22,6 +24,25 @@ Begreper som brukes videre i denne analysen:
 **Maksimalstyrke**: Brukes synonymt med total i denne analysen
 
 ## Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)
+
+```{r}
+
+library(tidyverse)
+
+powerlifting.clean <- openpowerlifting |>
+  filter(
+    !is.na(TotalKg),  #Har en registrert total
+    TotalKg > 0,
+    Equipment == "Raw", #Utstyrsfritt
+    !is.na(Tested), #Dopingtestet
+    Sex %in% c("M", "F"),#Kun kvinner og menn
+    !is.na(Dots)
+    )
+
+
+
+
+```
 
 ## Sammenhengen mellom total, kjønn og alder
 
@@ -84,7 +105,7 @@ tidy(m) |>
         col.names = c("Variabel", "Estimat", "p-verdi"))
 ```
 
-### Tolkning av regresjonsmodellen 
+### Tolkning av regresjonsmodellen
 
 Vi ser fra modellen at skjæringspunktet er 124.5 kg, som betyr at gjennomsnittlig kvinne vil ha en total på 124.5 kg ved en alder av 0. Dette er det matematiske utgangspunktet til modellen, og i praksis ikke nyttig og unøyaktig siden datasettet ikke inneholder data på så unge utøvere. Vi ser også at menn i gjennomsnitt løfter 143.8kg mer enn kvinner, og at for hver økning i alder med antall år, vil vi få en økning på 9.6kg på totalen. Koeffisienten for Age\^2 (-0.15) viser at det er et ikke lineært forhold mellom alder og maksimalstyrke. Etter en viss alder, så vil styrken avta.
 
@@ -110,3 +131,14 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 ```
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
+
+```{r}
+
+
+```
+
+```{r}
+
+
+
+```
