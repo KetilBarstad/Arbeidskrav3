@@ -66,6 +66,8 @@ sample.powerlifting <- powerlifting.clean |>
 
 Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og grafer.
 
+*Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke, og dermed ikke annerledes mellom menn og kvinner.*
+
 ```{r}
 #| echo: false
 #| message: false
@@ -98,7 +100,7 @@ Alle koeffisientene har en p-verdi på \<0.001, som betyr at både kjønn og ald
 #| warning: false
 ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
   geom_point(alpha = 0.2, size = 0.8) +
-  geom_smooth(method = "lm", formula = y ~ x + I(x^2)) +
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x + I(x^2)) +
   labs(
     title = "Polynomialregresjon",
     x = "Alder",
