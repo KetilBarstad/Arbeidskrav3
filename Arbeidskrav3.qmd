@@ -128,6 +128,26 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
 
-En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi se på et binomisk utfall (ikke godkjent / godkjent løft), som da vil følge en binomisk fordeling.Vi tar dermed utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent (Best3DeadliftKg \> 0).
+En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi bruke en GLM for å se på sannsynligheten for et binomialt utfall, som godkjent og ikke godkjent løft.
 
-Vi definerer den avhengige variabelen som 1 for godkjent løft i markløft hvis Best3DeadliftKg har en registrert vekt, og som 0 for ikke-godkjent løft hvis Best3DeadliftKg = NA. \
+Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent. Suksess i tredje forsøket blir altså den avhengige variabelen. I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negative verdi (-120). Vi kan dermed definere den avhengige variabelen som 1 for godkjent løft hvis variabelen "Deadlift3Kg" \> 0, og som 0 for ikke-godkjent løft hvis "Deadlift3Kg" \< 0.
+
+I modellen vår blir den uavhengie variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke.
+
+```{r}
+powerlifting.clean2 <- 
+  powerlifting.clean |>
+  mutate(Deadlift3attempt_success = ifelse(Deadlift3Kg > 0, 1, 0)) |>
+  filter(!is.na(Deadlift3attempt_success)) |>
+  mutate(Deadlift3attempt = abs(Deadlift3Kg))
+
+GLM_modell <- glm(Deadlift3attempt_success ~ Deadlift3attempt,
+                  data = powerlifting.clean2,
+                  family = binomial(link = "logit"))
+```
+
+Vi får da følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et stigningstall = -0.006. Skjæringspunktet forteller oss log-goddsen for å få et godkjent løft når den uavhengige variabelen er 0, altså når man løfter 0 kg. Dette er i praksis absurd, og ikke nyttig. Men når vi ser på stigningstallet, så ser vi at det er negativt. Det betyr altså for hver økning av i kg, så vil log-oddsen reduseres med 0.006. På odds-skalaen vil det betyr at oddsen multipliseres med exp(-0.06) = 0.994, med andre ord en reduksjon på 0.6% per kg.
+
+I modellen vår, så er "link-funksjonen" logit i koden. Den kobler den lineære delen av modellen til sannsynligheten for et binært utfall (godkjent / ikke-godkjent). Uten "link-funksjonen", ville vi fått verdier utenfor 0 og 1. Dette er spesielt viktig når vi skal se på sannsynligheter, siden verdiene vil alltid ligge mellom 0 og 1.
+
+\
