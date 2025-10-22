@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ketil B., Laurits H., Herman E. og Theodor S.">
-<meta name="dcterms.date" content="2026-09-10">
 
 <title>Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet</title>
 <style>
@@ -84,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#introduksjon" id="toc-introduksjon" class="nav-link active" data-scroll-target="#introduksjon"><span class="header-section-number">1</span> Introduksjon</a>
+  <li><a href="#beskrive-sammenhenger" id="toc-beskrive-sammenhenger" class="nav-link active" data-scroll-target="#beskrive-sammenhenger"><span class="header-section-number">1</span> Beskrive sammenhenger</a>
   <ul>
   <li><a href="#sammenhengen-mellom-to-kontinuerlige-variabler-total-og-krosppvekt" id="toc-sammenhengen-mellom-to-kontinuerlige-variabler-total-og-krosppvekt" class="nav-link" data-scroll-target="#sammenhengen-mellom-to-kontinuerlige-variabler-total-og-krosppvekt"><span class="header-section-number">1.1</span> Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)</a></li>
   <li><a href="#sammenhengen-mellom-total-kjønn-og-alder" id="toc-sammenhengen-mellom-total-kjønn-og-alder" class="nav-link" data-scroll-target="#sammenhengen-mellom-total-kjønn-og-alder"><span class="header-section-number">1.2</span> Sammenhengen mellom total, kjønn og alder</a>
@@ -118,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 10, 2026</p>
+      <p class="date">21/10/25</p>
     </div>
   </div>
   
@@ -130,59 +129,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduksjon" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Introduksjon</h1>
+<p>openpowerlifting &lt;- read.csv(“C:/Users/ketil/Downloads/openpowerlifting.csv”)</p>
+<section id="beskrive-sammenhenger" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Beskrive sammenhenger</h1>
+<p>Første del av arbeidskravet tar utgangspunkt i “Openpowerlifting” datasettet.</p>
+<p>Begreper som brukes videre i denne analysen:</p>
+<p><strong>Total</strong><em>: Summen av beste løftet i knebøy, benkpress og markløft sammenlagt, uttrykt i antall kilogram (eksempel: 150kg knebøy, 100 kg benkpress, 200 kg markløft = total på 450 kg)</em></p>
+<p><strong>Maksimalstyrke</strong>: Brukes synonymt med total i denne analysen</p>
+<p><strong>Utstyrsfritt</strong>: Det innebærer at man kun kan bruke et enkelt lag løftebelte (10 - 13mm bredde), myke knevarmere, håndleddsstøtter og drakt uten støtte. Alt annet utstyr er ikke tillatt.</p>
 <section id="sammenhengen-mellom-to-kontinuerlige-variabler-total-og-krosppvekt" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sammenhengen-mellom-to-kontinuerlige-variabler-total-og-krosppvekt"><span class="header-section-number">1.1</span> Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> openpowerlifting <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>), <span class="co">#Kun kvinner og menn</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="sammenhengen-mellom-total-kjønn-og-alder" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sammenhengen-mellom-total-kjønn-og-alder"><span class="header-section-number">1.2</span> Sammenhengen mellom total, kjønn og alder</h2>
-<p>Det er godt etablert at menn og kvinner presterer ulikt når det kommer til vekt løftet i et styrkeløftstevne. Dette er avhengig av muskelmasse, men også muskelarkitektur, fibertypesammensetning og flere andre faktorer som kombinert fører til at menn i gjennomsnitt er xx% til xx% sterkere enn kvinner.</p>
-<p>Vi vet også at alder spiller en rolle på maksimalstyrke, og at aller mest sannsynlig så vil i</p>
-<p>Siden “openpowerlifting” datasettet er svært stort, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og visualisjoner med. Dette skal gå fint, ettersom det er såpass stort utvalg at vi fortsatt kan lage represententative figurer selv om vi bare bruker et lite utvalg.</p>
-<p>Jeg skal vise en sammenligning mellom menn og kvinner, og hvilken effekt kjønn og alder har på total løftet. Fra et fysiologisk standpunkt kan vi anta at det vil være et kurvilineært forhold, ettersom man vil bli sterkere opp til en viss alder, før man senere vil bli svakere igjen. Dermed benytter vi oss av en polynomodell.</p>
+<p>Det er godt etablert at både kjønn og alder har en effekt på maksimalstyrke. Menn løfter i gjennomsnitt med kvinner, og alder kan ha både en negativ og positiv innvirkning på maksimalstyrke.</p>
+<p>Fra et fysiologisk standpunkt kan vi anta at det vil være et kurvilineært forhold mellom total, kjønn og alder, ettersom man vil bli sterkere opp til en viss alder, før man senere vil bli svakere igjen. Vi vil også forvente at menn og kvinner vil registrere ulike totaler på bakgrunn av ulik styrke.</p>
+<p>Siden “openpowerlifting” datasettet inneholder over tre millioner rader, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og grafer med. Vi valgte dermed å filtrere et utvalg på 5000 observasjoner.</p>
+<p>Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste en negativ korrelasjon mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med denne modellen). Ved bruk av den polynomiale modellen derimot, ser at vi styrken øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Last inn nødvendige pakker og datasettet</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.2
-✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.1.0     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer homogen målgruppe</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> openpowerlifting <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>),<span class="co">#Kun kvinner og menn</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Openpowerlifting <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/ketil/Downloads/openpowerlifting.csv"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(Openpowerlifting)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer spesifikk målgruppe</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> Openpowerlifting <span class="sc">|&gt;</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>),<span class="co">#Kun kvinner og menn</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og grafer.</p>
+<p>Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og en graf.</p>
+<p><em>Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke uavhengig av kjønn</em></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -243,22 +237,21 @@ F-statistic: 248.1 on 3 and 4354 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <section id="tolkning-av-regresjonsmodellen" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="tolkning-av-regresjonsmodellen"><span class="header-section-number">1.2.1</span> Tolkning av regresjonsmodellen</h3>
-<p>Vi ser fra modellen at skjæringspunktet er 124.5kg, som betyr at gjennomsnittlig kvinne vil ha en total på 124.5 ved en alder av 0. Dette er det matematiske utgangspunktet til modellen, og i praksis ikke nyttig og unøyaktig siden datasettet ikke inneholder data på så unge utøvere. Vi ser også at menn i gjennomsnitt løfter 143.8kg mer enn kvinner, og at for hver økning i alder med antall år, vil vi få en økning på 9.6kg på totalen. Koeffisienten for Age^2 (-0.15) viser at det er et ikke lineært forhold mellom alder og maksimalstyrke. Etter en viss alder, så vil styrken avta.</p>
+<p>Vi ser fra modellen at skjæringspunktet er 124.5 kg, som betyr at gjennomsnittlig kvinne vil ha en total på 124.5 kg ved en alder av 0. Dette er det matematiske utgangspunktet til modellen, og i praksis ikke nyttig og unøyaktig siden datasettet ikke inneholder data på så unge utøvere. Vi ser også at menn i gjennomsnitt løfter 143.8kg mer enn kvinner, og at for hver økning i alder med antall år, vil vi få en økning på 9.6kg på totalen. Koeffisienten for Age^2 (-0.15) viser at det er et ikke lineært forhold mellom alder og maksimalstyrke. Etter en viss alder, så vil styrken avta.</p>
 <p>Alle koeffisientene har en p-verdi på &lt;0.001, som betyr at både kjønn og alder har en statistisk signifikant effekt på styrke. Modellen kan forklare omtrentlig 14% av variasjonen i total vekt løftet (Justert R-squared = 0.14), som tyder på at andre faktorer enn kjønn og alder spiller inn på maksimalstyrke.</p>
 </section>
 <section id="figur-1-kurvilineær-graf-av-sammenhengen-mellom-total-kjønn-og-alder" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="figur-1-kurvilineær-graf-av-sammenhengen-mellom-total-kjønn-og-alder"><span class="header-section-number">1.2.2</span> Figur 1: Kurvilineær graf av sammenhengen mellom total, kjønn og alder</h3>
-<p><em>Figur 1: Figuren viser hvordan maksimalstyrke øker til et visst punkt, og når en topp rundt en alder av 35 år, før den gradvis avtar med økende alder.</em></p>
+<p><em>Figur 1: Figuren viser hvordan totalen varierer med alder for menn og kvinner, og når en topp rundt en alder av 30 -35 år, før den gradvis avtar.</em></p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Arbeidskrav3_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Arbeidskrav3_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Vi teste både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste at styrken avtok med økende alder, fra start. Dette er fysiologisk svært usannsynlig, ettersom en økning i alder fra eksempelvis 15 til 25 år, vil gi en betydelig økning i maksimalstyrke. Ved bruk av den polynomiale modellen derimot, ser at vi styrken øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.</p>
 </section>
 </section>
 <section id="hvordan-kan-vi-tolke-estimatet-i-en-generalisert-lineær-modell-hvor-den-avhengige-variabelen-er-enten-1-eller-0-hva-betyr-link-function-i-denne-sammenhengen-og-hva-gjør-den" class="level2" data-number="1.3">

@@ -1,3 +1,5 @@
+openpowerlifting \<- read.csv("C:/Users/ketil/Downloads/openpowerlifting.csv")
+
 ---
 title: "Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet"
 author: Ketil B., Laurits H., Herman E. og Theodor S.
@@ -9,8 +11,6 @@ format:
     toc-title: "Innhold"
     toc-depth: 4
     number-sections: true
-editor_options: 
-  chunk_output_type: console
 ---
 
 # Beskrive sammenhenger
@@ -19,15 +19,28 @@ Første del av arbeidskravet tar utgangspunkt i "Openpowerlifting" datasettet.
 
 Begreper som brukes videre i denne analysen:
 
-**Total***: Summen av beste løftet i knebøy, benkpress og markløft sammenlagt*
+**Total***: Summen av beste løftet i knebøy, benkpress og markløft sammenlagt, uttrykt i antall kilogram (eksempel: 150kg knebøy, 100 kg benkpress, 200 kg markløft = total på 450 kg)*
 
 **Maksimalstyrke**: Brukes synonymt med total i denne analysen
+
+**Utstyrsfritt**: Det innebærer at man kun kan bruke et enkelt lag løftebelte (10 - 13mm bredde), myke knevarmere, håndleddsstøtter og drakt uten støtte. Alt annet utstyr er ikke tillatt.
 
 ## Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)
 
 ```{r}
-
+#| include: false
+#Last inn nødvendige pakker
 library(tidyverse)
+library(readxl)
+library(broom)
+library(knitr)
+
+#Last inn datasettet. Skriv inn ditt egen navn og lokasjon
+#filen i stedet for "Ketil" og "Downloads"
+openpowerlifting <- read.csv("C:/Users/ketil/Downloads/openpowerlifting.csv")
+```
+
+```{r}
 
 powerlifting.clean <- openpowerlifting |>
   filter(
@@ -35,40 +48,25 @@ powerlifting.clean <- openpowerlifting |>
     TotalKg > 0,
     Equipment == "Raw", #Utstyrsfritt
     !is.na(Tested), #Dopingtestet
-    Sex %in% c("M", "F"),#Kun kvinner og menn
-    !is.na(Dots)
-    )
-
-
-
+    Sex %in% c("M", "F"), #Kun kvinner og menn
+    !is.na(Dots))
 
 ```
 
 ## Sammenhengen mellom total, kjønn og alder
 
-Det er godt etablert at både kjønn og alder har en effekt på maksimalstyrke. Dette er avhengig av muskelmasse, men også muskelarkitektur, hormon-nivåer og flere andre faktorer.
-
-Siden "openpowerlifting" datasettet inneholder over tre millioner rader, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og grafer med. Vi valgte dermed å filtrere et utvalg på 5000 observasjoner.
+Det er godt etablert at både kjønn og alder har en effekt på maksimalstyrke. Menn løfter i gjennomsnitt med kvinner, og alder kan ha både en negativ og positiv innvirkning på maksimalstyrke.
 
 Fra et fysiologisk standpunkt kan vi anta at det vil være et kurvilineært forhold mellom total, kjønn og alder, ettersom man vil bli sterkere opp til en viss alder, før man senere vil bli svakere igjen. Vi vil også forvente at menn og kvinner vil registrere ulike totaler på bakgrunn av ulik styrke.
 
-Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste at en negativ sammenheng mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med denne modellen). Ved bruk av den polynomiale modellen derimot, ser at vi styrken øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.
+Siden "openpowerlifting" datasettet inneholder over tre millioner rader, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og grafer med. Vi valgte dermed å filtrere et utvalg på 5000 observasjoner.
+
+Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste en negativ korrelasjon mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med denne modellen). Ved bruk av den polynomiale modellen derimot, ser at vi styrken øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.
 
 ```{r}
+#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer homogen målgruppe
 
-#Last inn nødvendige pakker og datasettet
-library(tidyverse)
-library(readxl)
-library(broom)
-library(knitr)
-
-Openpowerlifting <- read.csv("C:/Users/ketil/Downloads/openpowerlifting.csv")
-
-view(Openpowerlifting)
-
-#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer spesifikk målgruppe
-
-powerlifting.clean <- Openpowerlifting |>
+powerlifting.clean <- openpowerlifting |>
   filter(
     !is.na(TotalKg),  #Har en registrert total
     TotalKg > 0,
@@ -85,9 +83,9 @@ sample.powerlifting <- powerlifting.clean |>
   sample_n(5000)
 ```
 
-Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og grafer.
+Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og en graf.
 
-*Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke, og dermed ikke annerledes mellom menn og kvinner.*
+*Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke uavhengig av kjønn*
 
 ```{r}
 #| echo: false
@@ -95,8 +93,6 @@ Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og grafer.
 #Polynomialregresjon
 
 m <- lm(TotalKg ~ Sex + Age + I(Age^2), data = sample.powerlifting)
-
-summary(m)
 
 tidy(m) |>
   mutate(p.value = format.pval(p.value, digits = 2, eps = 0.001)) |>
@@ -132,13 +128,11 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
 
+En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi se på et binomisk utfall (ikke godkjent / godkjent løft), som da vil følge en binomisk fordeling.Vi tar dermed utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent (Best3DeadliftKg \> 0).
+
+Vi definerer den avhengige variabelen som 1 for godkjent løft i markløft hvis Best3DeadliftKg har en registrert vekt, og som 0 for ikke-godkjent løft hvis Best3DeadliftKg = NA. \
+\
+
 ```{r}
-
-
-```
-
-```{r}
-
-
 
 ```
