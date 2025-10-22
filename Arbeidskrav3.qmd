@@ -131,8 +131,3 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi se på et binomisk utfall (ikke godkjent / godkjent løft), som da vil følge en binomisk fordeling.Vi tar dermed utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent (Best3DeadliftKg \> 0).
 
 Vi definerer den avhengige variabelen som 1 for godkjent løft i markløft hvis Best3DeadliftKg har en registrert vekt, og som 0 for ikke-godkjent løft hvis Best3DeadliftKg = NA. \
-\
-
-```{r}
-
-```
