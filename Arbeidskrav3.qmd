@@ -37,7 +37,11 @@ library(knitr)
 
 #Last inn datasettet. Skriv inn ditt egen navn og lokasjon
 #filen i stedet for "Ketil" og "Downloads"
-openpowerlifting <- read.csv("C:/Users/ketil/Downloads/openpowerlifting.csv")
+openpowerlifting <- read.csv("C:/Users/laurits/Desktop/openpowerlifting.csv")
+
+
+
+
 ```
 
 ```{r}
@@ -50,6 +54,53 @@ powerlifting.clean <- openpowerlifting |>
     !is.na(Tested), #Dopingtestet
     Sex %in% c("M", "F"), #Kun kvinner og menn
     !is.na(Dots))
+
+
+cor.test(sample.powerlifting$TotalKg, sample.powerlifting$BodyweightKg)
+
+model <- lm(TotalKg ~ BodyweightKg, data = sample.powerlifting)
+summary(model)
+
+library(ggplot2)
+
+ggplot(sample.powerlifting, aes(x = BodyweightKg, y = TotalKg)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(title = "Forhold mellom kroppsvekt og total løftet vekt",
+       x = "Kroppsvekt (kg)",
+       y = "Total (kg)")
+
+
+
+
+
+```
+
+```{r}
+
+# Calculate correlation between bodyweight and total lift
+r <- cor(sample.powerlifting$BodyweightKg, sample.powerlifting$TotalKg)
+
+
+# Calculate standard deviations of both variables
+sd_y <- sd(sample.powerlifting$TotalKg)       # standard deviation of Total (Y)
+sd_x <- sd(sample.powerlifting$BodyweightKg)  # standard deviation of Bodyweight (X)
+
+# Compute the expected slope (b) from the correlation
+b_expected <- r * (sd_y / sd_x)
+
+# Display the expected regression coefficient
+b_expected
+
+mean_x <- mean(sample.powerlifting$BodyweightKg)
+mean_y <- mean(sample.powerlifting$TotalKg)
+b0_expected <- mean_y - b_expected * mean_x
+
+
+
+
+
+
 
 ```
 
