@@ -169,7 +169,7 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 
 En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi bruke en logistisk regresjonsmodell som er en underkategori av GLM, for å se på log-oddsen for et binomialt utfall, som godkjent og ikke-godkjent løft.
 
-Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent. Vi tar utgangspunkt i variabelen "Deadlift3Kg" i datasettet, for å lage våre binære utfallsvariabel "Deadlift3_success". I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negative verdi (-120). Vi kan dermed definere utfallsvariabelen som 1 for godkjent løft hvis variabelen "Deadlift3Kg" \> 0, og som 0 for ikke-godkjent løft hvis "Deadlift3Kg" \< 0. Hvis verdien til variabelen er "NA", betyr det at det ikke ble forsøkt, og disse verdiene blir ekskludert fra modellen.
+Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent eller ikke. Variabelen"Deadlift3Kg" i datasettet blir brukt for å lage vår binære utfallsvariabel "Deadlift3_success". I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negativ verdi (eks: -120). Vi kan dermed definere utfallsvariabelen som 1 for godkjent løft hvis variabelen "Deadlift3Kg" \> 0, og som 0 for ikke-godkjent løft hvis "Deadlift3Kg" \< 0. Hvis verdien til variabelen er "NA", betyr det at løftet ikke ble forsøkt, og disse verdiene blir ekskludert fra modellen.
 
 I modellen vår blir den uavhengige variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke. Vi vil dermed forvente en negativ koeffisient.
 
@@ -195,7 +195,7 @@ ggplot(powerlifting.clean2, aes(x = Deadlift3attempt, y = Deadlift3_success)) +
        x = "Vekt (kg)", y = "Sannsynlighet for suksess")
 ```
 
-Vi får følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et stigningstall = -0.006. Skjæringspunktet forteller oss log-oddsen for å få et godkjent løft når den uavhengige variabelen er 0, altså når man løfter 0 kg. Dette er i praksis absurd, og ikke nyttig. Men når vi ser på stigningstallet, så ser vi at det er negativt. Det betyr altså for hver økning i kg, så vil log-oddsen reduseres med 0.006. På odds-skalaen vil det betyr at oddsen multipliseres med exp(-0.006) = 0.994. Med andre ord, vil oddsen for å lykkes med 3. forsøk i markløft reduseres med ca. 0.6% per kg man øker vekten med.
+Vi får følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et stigningstall = -0.006. Skjæringspunktet forteller oss log-oddsen for å få et godkjent løft når den uavhengige variabelen er 0, altså når man løfter 0 kg. Dette er i praksis absurd, og ikke nyttig. Når vi ser på stigningstallet, så ser vi at den har en negativ verdi. Det betyr at for hver økning i x (antall kg), så vil log-oddsen reduseres med 0.006. På odds-skalaen vil det bety at oddsen multipliseres med exp(-0.006) = 0.994. Med andre ord, vil oddsen for å lykkes med tredje forsøket i markløft reduseres med ca. 0.6% per kg man øker vekten med.
 
 ***Merk**: Modellen predikerer kun basert på vekt forsøkt, og tar ikke hensyn til andre faktorer som treningserfaring, muskelmasse, teknikk og så videre.*
 
