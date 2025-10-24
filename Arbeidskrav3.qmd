@@ -1,5 +1,3 @@
-openpowerlifting \<- read.csv("C:/Users/ketil/Downloads/openpowerlifting.csv")
-
 ---
 title: "Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet"
 author: Ketil B., Laurits H., Herman E. og Theodor S.
@@ -25,7 +23,7 @@ Begreper som brukes videre i denne analysen:
 
 **Utstyrsfritt**: Det innebærer at man kun kan bruke et enkelt lag løftebelte (10 - 13mm bredde), myke knevarmere, håndleddsstøtter og drakt uten støtte. Alt annet utstyr er ikke tillatt.
 
-## Sammenhengen mellom to kontinuerlige variabler (Total og krosppvekt)
+## Sammenhengen mellom to kontinuerlige variabler (Total og kroppsvekt)
 
 ```{r}
 #| include: false
@@ -37,10 +35,7 @@ library(knitr)
 
 #Last inn datasettet. Skriv inn ditt egen navn og lokasjon
 #filen i stedet for "Ketil" og "Downloads"
-openpowerlifting <- read.csv("C:/Users/laurits/Desktop/openpowerlifting.csv")
-
-
-
+openpowerlifting <- read.csv("C:/Users/Ketil/Downloads/openpowerlifting.csv")
 
 ```
 
@@ -55,24 +50,23 @@ powerlifting.clean <- openpowerlifting |>
     Sex %in% c("M", "F"), #Kun kvinner og menn
     !is.na(Dots))
 
+set.seed(123)
+sample.powerlifting <- powerlifting.clean |>
+  sample_n(5000)
 
 cor.test(sample.powerlifting$TotalKg, sample.powerlifting$BodyweightKg)
 
 model <- lm(TotalKg ~ BodyweightKg, data = sample.powerlifting)
+
 summary(model)
 
-library(ggplot2)
 
 ggplot(sample.powerlifting, aes(x = BodyweightKg, y = TotalKg)) +
   geom_point() +
   geom_smooth(method = "lm", color = "blue") +
-  labs(title = "Forhold mellom kroppsvekt og total løftet vekt",
+  labs(title = "Forhold mellom kroppsvekt og total",
        x = "Kroppsvekt (kg)",
        y = "Total (kg)")
-
-
-
-
 
 ```
 
@@ -96,12 +90,6 @@ mean_x <- mean(sample.powerlifting$BodyweightKg)
 mean_y <- mean(sample.powerlifting$TotalKg)
 b0_expected <- mean_y - b_expected * mean_x
 
-
-
-
-
-
-
 ```
 
 ## Sammenhengen mellom total, kjønn og alder
@@ -112,7 +100,7 @@ Fra et fysiologisk standpunkt kan vi anta at det vil være et kurvilineært forh
 
 Siden "openpowerlifting" datasettet inneholder over tre millioner rader, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og grafer med. Vi valgte dermed å filtrere et utvalg på 5000 observasjoner.
 
-Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste en negativ korrelasjon mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med denne modellen). Ved bruk av den polynomiale modellen derimot, ser at vi styrken øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.
+Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste en negativ korrelasjon mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med den lineære modellen). Ved bruk av den polynomiale modellen derimot, ser at vi totalen øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.
 
 ```{r}
 #Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer homogen målgruppe
@@ -179,26 +167,38 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
 
-En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi bruke en GLM for å se på sannsynligheten for et binomialt utfall, som godkjent og ikke godkjent løft.
+En generalisert lineær modell (GLM) er en type modell som lar oss jobbe med data som ikke er normalfordelt. I vårt tilfelle, så kan vi bruke en logistisk regresjonsmodell som er en underkategori av GLM, for å se på log-oddsen for et binomialt utfall, som godkjent og ikke-godkjent løft.
 
-Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent. Suksess i tredje forsøket blir altså den avhengige variabelen. I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negative verdi (-120). Vi kan dermed definere den avhengige variabelen som 1 for godkjent løft hvis variabelen "Deadlift3Kg" \> 0, og som 0 for ikke-godkjent løft hvis "Deadlift3Kg" \< 0.
+Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent. Vi tar utgangspunkt i variabelen "Deadlift3Kg" i datasettet, for å lage våre binære utfallsvariabel "Deadlift3_success". I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negative verdi (-120). Vi kan dermed definere utfallsvariabelen som 1 for godkjent løft hvis variabelen "Deadlift3Kg" \> 0, og som 0 for ikke-godkjent løft hvis "Deadlift3Kg" \< 0. Hvis verdien til variabelen er "NA", betyr det at det ikke ble forsøkt, og disse verdiene blir ekskludert fra modellen.
 
-I modellen vår blir den uavhengie variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke.
+I modellen vår blir den uavhengige variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke. Vi vil dermed forvente en negativ koeffisient.
 
 ```{r}
+#| message: false
+#| warning: false
 powerlifting.clean2 <- 
   powerlifting.clean |>
-  mutate(Deadlift3attempt_success = ifelse(Deadlift3Kg > 0, 1, 0)) |>
-  filter(!is.na(Deadlift3attempt_success)) |>
+  mutate(Deadlift3_success = ifelse(Deadlift3Kg > 0, 1, 0)) |>
+  filter(!is.na(Deadlift3_success)) |>
   mutate(Deadlift3attempt = abs(Deadlift3Kg))
 
-GLM_modell <- glm(Deadlift3attempt_success ~ Deadlift3attempt,
+GLM_modell <- glm(Deadlift3_success ~ Deadlift3attempt,
                   data = powerlifting.clean2,
                   family = binomial(link = "logit"))
+
+tidy(GLM_modell) |>  kable(digits = 3)
+
+ggplot(powerlifting.clean2, aes(x = Deadlift3attempt, y = Deadlift3_success)) +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
+  labs(title = "Sannsynlighet for suksess",
+       x = "Vekt (kg)", y = "Sannsynlighet for suksess")
 ```
 
-Vi får da følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et stigningstall = -0.006. Skjæringspunktet forteller oss log-goddsen for å få et godkjent løft når den uavhengige variabelen er 0, altså når man løfter 0 kg. Dette er i praksis absurd, og ikke nyttig. Men når vi ser på stigningstallet, så ser vi at det er negativt. Det betyr altså for hver økning av i kg, så vil log-oddsen reduseres med 0.006. På odds-skalaen vil det betyr at oddsen multipliseres med exp(-0.06) = 0.994, med andre ord en reduksjon på 0.6% per kg.
+Vi får følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et stigningstall = -0.006. Skjæringspunktet forteller oss log-oddsen for å få et godkjent løft når den uavhengige variabelen er 0, altså når man løfter 0 kg. Dette er i praksis absurd, og ikke nyttig. Men når vi ser på stigningstallet, så ser vi at det er negativt. Det betyr altså for hver økning i kg, så vil log-oddsen reduseres med 0.006. På odds-skalaen vil det betyr at oddsen multipliseres med exp(-0.006) = 0.994. Med andre ord, vil oddsen for å lykkes med 3. forsøk i markløft reduseres med ca. 0.6% per kg man øker vekten med.
 
-I modellen vår, så er "link-funksjonen" logit i koden. Den kobler den lineære delen av modellen til sannsynligheten for et binært utfall (godkjent / ikke-godkjent). Uten "link-funksjonen", ville vi fått verdier utenfor 0 og 1. Dette er spesielt viktig når vi skal se på sannsynligheter, siden verdiene vil alltid ligge mellom 0 og 1.
+***Merk**: Modellen predikerer kun basert på vekt forsøkt, og tar ikke hensyn til andre faktorer som treningserfaring, muskelmasse, teknikk og så videre.*
+
+I den logistiske regresjonsmodellen, så ønsker vi å se på sannsynligheten for et utfall ved hjelp av en lineær regresjonsmodell. Problemet med dette, er at sannsynligheten må alltid ha en verdi mellom 0 og 1, og en lineær regresjon kan gi oss verdier langt utenfor dette spennet. "Link-function" fungerer som en bro, ved at den transformerer sannsynligheter om til log-odds, som kan være verdier utenfor 0 til 1. Dermed kan vi fortsatt bruke den kraftige lineære regresjonsmodellen selv på binære utfall, ved hjelp av denne funksjonen.
 
 \
