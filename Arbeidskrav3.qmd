@@ -39,6 +39,8 @@ openpowerlifting <- read.csv("C:/Users/Ketil/Downloads/openpowerlifting.csv")
 
 ```
 
+Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369r, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.
+
 ```{r}
 
 powerlifting.clean <- openpowerlifting |>
@@ -69,6 +71,12 @@ ggplot(sample.powerlifting, aes(x = BodyweightKg, y = TotalKg)) +
        y = "Total (kg)")
 
 ```
+
+I en lineær regresjonsmodell gir i tillegg et mål på hvor mye den avhengige variabelen (TotalKg) endrer seg når den uavhengige variabelen (BodyweightKg) øker.
+
+I modellen TotalKg = 79.93 + 3.35 × BodyweightKg betyr dette at totalen i gjennomsnitt øker med omtrent 3.35 kg for hver ekstra kilo kroppsvekt.
+
+Det finnes en direkte kobling mellom korrelasjonskoeffisienten og regresjonsmodellen: b1=r×(sy/sx), der s(y) og s(x) ​er standardavvikene til henholdsvis TotalKg og BodyweightKg. Når vi beregner denne forventede stigningstallet ut fra korrelasjonen, får vi nøyaktig samme verdi som i regresjonsmodellen (b_expected = 3,35). Dette viser at analysen er konsistent, og at korrelasjon og regresjon beskriver den samme lineære sammenhengen. Samlet viser analysen en signifikant, men moderat lineær sammenheng mellom kroppsvekt og total løfteprestasjon.
 
 ```{r}
 
