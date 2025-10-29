@@ -32,6 +32,7 @@ library(tidyverse)
 library(readxl)
 library(broom)
 library(knitr)
+library(exscidata)
 
 #Last inn datasettet. Skriv inn ditt egen navn og lokasjon
 #filen i stedet for "Ketil" og "Downloads"
@@ -209,4 +210,106 @@ Vi får følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et sti
 
 I den logistiske regresjonsmodellen, så ønsker vi å se på sannsynligheten for et utfall ved hjelp av en lineær regresjonsmodell. Problemet med dette, er at sannsynligheten må alltid ha en verdi mellom 0 og 1, og en lineær regresjon kan gi oss verdier langt utenfor dette spennet. "Link-function" fungerer som en bro, ved at den transformerer sannsynligheter om til log-odds, som kan være verdier utenfor 0 til 1. Dermed kan vi fortsatt bruke den kraftige lineære regresjonsmodellen selv på binære utfall, ved hjelp av denne funksjonen.
 
-\
+# Predikere observasjoner 
+
+### Bruk data fra datasettet strengthvolume og lag en prediksjonsmodell for legext basert på legpress.
+
+
+```{r}
+#Vi må først filtrere datasettet
+Legext_modell <- strengthvolume |> 
+  filter(exercise %in% c("legpress", "legext")) |>
+  pivot_wider(names_from = exercise,
+              values_from = load)
+
+#Prediksjonsmodell for legext basert på legpress
+ext.m1 <- lm(legext ~ legpress, data = Legext_modell)
+```
+
+- Bruk data fra et tidspunkt (time) og et treningsvolum (sets)
+
+```{r}
+#| message: false
+#| include: false
+Legext_modell |>
+  filter(
+    time == "session1",
+    sets == "single"
+  )
+```
+
+### Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?
+
+Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og økning i legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og økning i legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet. 
+
+```{r}
+ext.m2 <- lm(legext ~ legpress + sex, data = Legext_modell)
+
+ext.m3 <- lm(legext ~ legpress + sex + sex:legpress, data = Legext_modell)
+
+#Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg
+
+predict(ext.m2, newdata = data.frame(legpress = 150,
+                                      sex = "female")) 
+predict(ext.m2, newdata = data.frame(legpress = 150,
+                                     sex = "male"))
+
+#Prediksjoner innad kjønn MED interaksjonseffekt. Vi bruker ext.m3 modellen.
+
+predict(ext.m3, newdata = data.frame(legpress = 150,
+                                     sex = "female"))
+predict(ext.m3, newdata = data.frame(legpress = 150,
+                                     sex = "male"))
+
+#Prediksjoner i gjennomsnitt i begge kjønn. Her bruker vi ext.m1 som gir oss en gjennomsnittlig verdi på tvers av kjønnene
+
+predict(ext.m1, newdata = data.frame(legpress = 150))
+
+
+Prediksjoner <- data.frame(
+  Model = c("m1 (average)", "m2 (female)", "m2 (male)", "m3 (female)", "m3 (male)"),
+  Prediction = c(
+    predict(ext.m1, newdata = data.frame(legpress = 150)),
+    predict(ext.m2, newdata = data.frame(legpress = 150, sex = "female")),
+    predict(ext.m2, newdata = data.frame(legpress = 150, sex = "male")),
+    predict(ext.m3, newdata = data.frame(legpress = 150, sex = "female")),
+    predict(ext.m3, newdata = data.frame(legpress = 150, sex = "male"))
+  )
+)
+
+knitr::kable(Prediksjoner, digits = 2, caption = "Prediksjoner fra de ulike modellene")
+  
+```
+
+I tabellen over ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom som menn er i gjennomsnitt sterkere enn kvinner. Likevel, så det ut til at m3 og m2 gir svært liknende prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
+
+
+### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
+
+```{r}
+# Prediksjonsintervall for kvinner 
+pred_female <- predict(ext.m2, 
+                       newdata = data.frame(legpress = 150, sex = "female"),
+                       interval = "prediction",
+                       level = 0.95)
+
+# Prediksjonsintervall for menn
+pred_male <- predict(ext.m2, 
+                     newdata = data.frame(legpress = 150, sex = "male"),
+                     interval = "prediction",
+                     level = 0.95)
+
+# Tabell
+pred_intervals <- data.frame(
+  Sex = c("Female", "Male"),
+  Prediction = c(pred_female[1], pred_male[1]),
+  Lower = c(pred_female[2], pred_male[2]),
+  Upper = c(pred_female[3], pred_male[3])
+)
+
+knitr::kable(pred_intervals, digits = 2, 
+             caption = "95% prediksjonsintervall for legextension ved legpress = 150 kg")
+```
+
+
+
