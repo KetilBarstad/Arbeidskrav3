@@ -7,7 +7,7 @@ format:
     toc: true
     toc-location: right
     toc-title: "Innhold"
-    toc-depth: 4
+    toc-depth: 3
     number-sections: true
 ---
 
@@ -67,7 +67,7 @@ summary(model)
 ggplot(sample.powerlifting, aes(x = BodyweightKg, y = TotalKg)) +
   geom_point() +
   geom_smooth(method = "lm", color = "blue") +
-  labs(title = "Forhold mellom kroppsvekt og total",
+  labs(title = "Graf 1: Forhold mellom kroppsvekt og total",
        x = "Kroppsvekt (kg)",
        y = "Total (kg)")
 
@@ -155,9 +155,9 @@ Vi ser fra modellen at skjæringspunktet er 124.5 kg, som betyr at gjennomsnittl
 
 Alle koeffisientene har en p-verdi på \<0.001, som betyr at både kjønn og alder har en statistisk signifikant effekt på styrke. Modellen kan forklare omtrentlig 14% av variasjonen i total vekt løftet (Justert R-squared = 0.14), som tyder på at andre faktorer enn kjønn og alder spiller inn på maksimalstyrke.
 
-### Figur 1: Kurvilineær graf av sammenhengen mellom total, kjønn og alder
+### Graf 2: Kurvilineær graf av sammenhengen mellom total, kjønn og alder
 
-*Figur 1: Figuren viser hvordan totalen varierer med alder for menn og kvinner, og når en topp rundt en alder av 30 -35 år, før den gradvis avtar.*
+*Graf 2: Figuren viser hvordan totalen varierer med alder for menn og kvinner, og når en topp rundt en alder av 30 -35 år, før den gradvis avtar.*
 
 ```{r}
 #| echo: false
@@ -167,7 +167,7 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
   geom_point(alpha = 0.2, size = 0.8) +
   geom_smooth(method = "lm", se = FALSE, formula = y ~ x + I(x^2)) +
   labs(
-    title = "Polynomialregresjon",
+    title = "Graf 2: Polynomialregresjon",
     x = "Alder",
     y = "Total (Kg)"
   ) +
@@ -230,6 +230,7 @@ ext.m1 <- lm(legext ~ legpress, data = Legext_modell)
 
 ```{r}
 #| message: false
+#| include: false
 #| paged-print: true
 Legext_modell |>
   filter(
@@ -240,7 +241,7 @@ Legext_modell |>
 
 ### Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?
 
-Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet. 
+Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet. 
 
 ```{r}
 #| echo: false
@@ -283,7 +284,7 @@ knitr::kable(Prediksjoner, digits = 2, caption = "Tabell 1: Prediksjoner fra de 
   
 ```
 
-I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom  menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
+I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom  menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
 
 
 ### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
@@ -314,5 +315,31 @@ knitr::kable(pred_intervals, digits = 2,
              caption = "Tabell 2: 95% prediksjonsintervall for legextension ved legpress = 150 kg")
 ```
 
+Prediksjonsintervallet vårt forteller oss hvilke verdier vi kan forvente for legextension når en deltaker klarer 150 kg i legpress, både for kvinnelig og mannlig kjønn.
 
+Hvis en kvinne tar 150kg i legpress, forventer vi at nye kvinner har en 95% sannsynlighet for å få en legextension verdi mellom 27 og 75kg. Modellen viser oss en gjennomsnittlig prediksjon på 51kg. Hvis en mann tar 150 kg i legpress, forventer vi nye menn har en 95% sannsynlighet for å få en legextension verdi mellom 43 og 91 kg. Modellen viser oss en gjennomsnittlig prediksjon på 68 kg.
 
+Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for legextension når legpress er 150kg, for begge kjønn. Dette kan tyde på store individuelle forskjeller, selv ved samme legpress verdier. 
+
+# Trekke slutninger
+
+## Bruk datasettet strengtvolume og formuler en modell som gir oss et estimat på forskjell i gjennomsnitt mellom sets i forandring fra tidspunkt pre til tidspunkt post i legext. Gi begrunnelse til valg av modell og håndtering av data.
+
+Trinnvis beskrivelse av oppgaveløsning:
+
+Vi løser oppgaven i JASP. 
+·	Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. 
+·	Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. 
+·	Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components
+·	I random components valgte vi å se på intercept .
+·	I options huket vi av model summary og fixed effects estimates.
+·	I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show.
+·	I tillegg førte vi inn i plots for å illustrere med en graf.
+
+![Tabell 3: Mixed effect modellen](Figurer/Mixed_effect.png)
+
+![Graf 3: Linjediagram av mixed-effect modellen. Endring i load fra pre- til post](Figurer/Graf.png){width=50%}
+
+### Hvordan kan vi bruke regresjonsmodellen for å si noe om populasjonen som dataene kommer fra? 
+
+Vi kan bruke regresjonsmodellen for å si noe om at det er en klar tidseffekt fra pre til post tester. Observasjonene fra modellen viser oss også forskjellen mellom økning i single og multiple sets fra pre til post på modellen ser vi at økningen er større i flere sets. Forskjellen mellom single og multiple sets på baseline er ubetydelig (p=0.809). 
