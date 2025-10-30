@@ -97,8 +97,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#predikere-observasjoner" id="toc-predikere-observasjoner" class="nav-link" data-scroll-target="#predikere-observasjoner"><span class="header-section-number">2</span> Predikere observasjoner</a>
   <ul>
   <li><a href="#bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress." id="toc-bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress." class="nav-link" data-scroll-target="#bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress."><span class="header-section-number">2.0.1</span> Bruk data fra datasettet strengthvolume og lag en prediksjonsmodell for legext basert på legpress.</a></li>
-  <li><a href="#hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" id="toc-hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="nav-link" data-scroll-target="#hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.0.2</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</a></li>
-  <li><a href="#modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" id="toc-modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="nav-link" data-scroll-target="#modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.0.3</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</a></li>
+  <li><a href="#bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" id="toc-bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" class="nav-link" data-scroll-target="#bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets"><span class="header-section-number">2.1</span> Bruk data fra et tidspunkt (time) og et treningsvolum (sets)</a>
+  <ul class="collapse">
+  <li><a href="#hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" id="toc-hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="nav-link" data-scroll-target="#hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.1.1</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</a></li>
+  <li><a href="#modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" id="toc-modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="nav-link" data-scroll-target="#modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.1.2</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -398,68 +401,59 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjonsmodell for legext basert på legpress</span></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ext.m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress, <span class="at">data =</span> Legext_modell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<ul>
-<li>Bruk data fra et tidspunkt (time) og et treningsvolum (sets)</li>
-</ul>
 </section>
-<section id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="level3" data-number="2.0.2">
-<h3 data-number="2.0.2" class="anchored" data-anchor-id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.0.2</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</h3>
-<p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2” har ingen interaksjonseffekt mellom kjønn og økning i legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og økning i legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet.</p>
+<section id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets"><span class="header-section-number">2.1</span> Bruk data fra et tidspunkt (time) og et treningsvolum (sets)</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ext.m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress <span class="sc">+</span> sex, <span class="at">data =</span> Legext_modell)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ext.m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress <span class="sc">+</span> sex <span class="sc">+</span> sex<span class="sc">:</span>legpress, <span class="at">data =</span> Legext_modell)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">sex =</span> <span class="st">"female"</span>)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    time <span class="sc">==</span> <span class="st">"session1"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    sets <span class="sc">==</span> <span class="st">"single"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 39 × 8
+   participant sex    include time     sets   leg   legpress legext
+   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 FP13        male   incl    session1 single R        125       55
+ 2 FP1         male   excl    session1 single R        175       65
+ 3 FP16        female incl    session1 single R         95       35
+ 4 FP17        male   incl    session1 single L        295       75
+ 5 FP12        female incl    session1 single L        225       75
+ 6 FP11        male   incl    session1 single L        180       65
+ 7 FP9         male   incl    session1 single L        165       80
+ 8 FP14        female incl    session1 single L         87.5     50
+ 9 FP4         female excl    session1 single L        170       45
+10 FP6         female incl    session1 single R        110       40
+# ℹ 29 more rows</code></pre>
+</div>
+</div>
+<section id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.1.1</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</h3>
+<p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2” har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet.</p>
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>       1 
 51.12457 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"male"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1 
 67.53951 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner innad kjønn MED interaksjonseffekt. Vi bruker ext.m3 modellen.</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"female"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      1 
 50.4837 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"male"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      1 
 68.6434 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner i gjennomsnitt i begge kjønn. Her bruker vi ext.m1 som gir oss en gjennomsnittlig verdi på tvers av kjønnene</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ext.m1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1 
 56.20788 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Prediksjoner <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"m1 (average)"</span>, <span class="st">"m2 (female)"</span>, <span class="st">"m2 (male)"</span>, <span class="st">"m3 (female)"</span>, <span class="st">"m3 (male)"</span>),</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Prediction =</span> <span class="fu">c</span>(</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(ext.m1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>)),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"female"</span>)),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"male"</span>)),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"female"</span>)),</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"male"</span>))</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Prediksjoner, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Prediksjoner fra de ulike modellene"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Prediksjoner fra de ulike modellene</caption>
+<caption>Tabell 1: Prediksjoner fra de ulike modellene</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
@@ -491,36 +485,14 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table>
 </div>
 </div>
-<p>I tabellen over ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom som menn er i gjennomsnitt sterkere enn kvinner. Likevel, så det ut til at m3 og m2 gir svært liknende prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.</p>
+<p>I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.</p>
 </section>
-<section id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="level3" data-number="2.0.3">
-<h3 data-number="2.0.3" class="anchored" data-anchor-id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.0.3</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</h3>
+<section id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.1.2</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediksjonsintervall for kvinner </span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>pred_female <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m2, </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"female"</span>),</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">interval =</span> <span class="st">"prediction"</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediksjonsintervall for menn</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>pred_male <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m2, </span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>, <span class="at">sex =</span> <span class="st">"male"</span>),</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">interval =</span> <span class="st">"prediction"</span>,</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabell</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>pred_intervals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sex =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>),</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">Prediction =</span> <span class="fu">c</span>(pred_female[<span class="dv">1</span>], pred_male[<span class="dv">1</span>]),</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Lower =</span> <span class="fu">c</span>(pred_female[<span class="dv">2</span>], pred_male[<span class="dv">2</span>]),</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Upper =</span> <span class="fu">c</span>(pred_female[<span class="dv">3</span>], pred_male[<span class="dv">3</span>])</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(pred_intervals, <span class="at">digits =</span> <span class="dv">2</span>, </span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"95% prediksjonsintervall for legextension ved legpress = 150 kg"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>95% prediksjonsintervall for legextension ved legpress = 150 kg</caption>
+<caption>Tabell 2: 95% prediksjonsintervall for legextension ved legpress = 150 kg</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Sex</th>
@@ -546,6 +518,7 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table>
 </div>
 </div>
+</section>
 </section>
 </section>
 

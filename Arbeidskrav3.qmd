@@ -226,11 +226,11 @@ Legext_modell <- strengthvolume |>
 ext.m1 <- lm(legext ~ legpress, data = Legext_modell)
 ```
 
-- Bruk data fra et tidspunkt (time) og et treningsvolum (sets)
+## Bruk data fra et tidspunkt (time) og et treningsvolum (sets)
 
 ```{r}
 #| message: false
-#| include: false
+#| paged-print: true
 Legext_modell |>
   filter(
     time == "session1",
@@ -240,9 +240,11 @@ Legext_modell |>
 
 ### Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?
 
-Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og økning i legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og økning i legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet. 
+Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellen viser oss, og hvilken som er mest egnet. 
 
 ```{r}
+#| echo: false
+#| paged-print: true
 ext.m2 <- lm(legext ~ legpress + sex, data = Legext_modell)
 
 ext.m3 <- lm(legext ~ legpress + sex + sex:legpress, data = Legext_modell)
@@ -277,16 +279,17 @@ Prediksjoner <- data.frame(
   )
 )
 
-knitr::kable(Prediksjoner, digits = 2, caption = "Prediksjoner fra de ulike modellene")
+knitr::kable(Prediksjoner, digits = 2, caption = "Tabell 1: Prediksjoner fra de ulike modellene")
   
 ```
 
-I tabellen over ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom som menn er i gjennomsnitt sterkere enn kvinner. Likevel, så det ut til at m3 og m2 gir svært liknende prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
+I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom  menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1,som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
 
 
 ### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
 
 ```{r}
+#| echo: false
 # Prediksjonsintervall for kvinner 
 pred_female <- predict(ext.m2, 
                        newdata = data.frame(legpress = 150, sex = "female"),
@@ -308,7 +311,7 @@ pred_intervals <- data.frame(
 )
 
 knitr::kable(pred_intervals, digits = 2, 
-             caption = "95% prediksjonsintervall for legextension ved legpress = 150 kg")
+             caption = "Tabell 2: 95% prediksjonsintervall for legextension ved legpress = 150 kg")
 ```
 
 
