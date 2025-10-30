@@ -3,7 +3,7 @@ title: "Arbeidskrav 3: Regresjonsanalyse"
 author: Ketil B., Laurits H., Herman E. og Theodor S.
 date: 2025-10-30
 format:
-  pdf:
+  html:
     toc: true
     toc-location: right
     toc-title: "Innhold"
@@ -321,17 +321,9 @@ Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for 
 
 ## Bruk datasettet strengtvolume og formuler en modell som gir oss et estimat på forskjell i gjennomsnitt mellom sets i forandring fra tidspunkt pre til tidspunkt post i legext. Gi begrunnelse til valg av modell og håndtering av data.
 
-Trinnvis beskrivelse av oppgaveløsning:
+Følgende del av oppgaven løses i JASP.  
 
-Vi løser oppgaven i JASP. 
-
-· Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. 
-· Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. 
-· Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components 
-· I random components valgte vi å se på intercept . 
-· I options huket vi av model summary og fixed effects estimates. 
-· I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. 
-· I tillegg førte vi inn i plots for å illustrere med en graf.
+Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. Deretter satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components I random components valgte vi å se på intercept . I options huket vi av model summary og fixed effects estimates. I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. I tillegg førte vi inn i plots for å illustrere med en graf.
 
 ![Mixed effect modellen](Figurer/Mixed_effect.png)
 

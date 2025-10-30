@@ -9,7 +9,7 @@
 <meta name="author" content="Ketil B., Laurits H., Herman E. og Theodor S.">
 <meta name="dcterms.date" content="2025-10-30">
 
-<title>Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet</title>
+<title>Arbeidskrav 3: Regresjonsanalyse</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet</h1>
+<h1 class="title">Arbeidskrav 3: Regresjonsanalyse</h1>
 </div>
 
 
@@ -369,13 +369,36 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets"><span class="header-section-number">2.1</span> Bruk data fra et tidspunkt (time) og et treningsvolum (sets)</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    time <span class="sc">==</span> <span class="st">"session1"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    sets <span class="sc">==</span> <span class="st">"single"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 39 × 8
+   participant sex    include time     sets   leg   legpress legext
+   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 FP13        male   incl    session1 single R        125       55
+ 2 FP1         male   excl    session1 single R        175       65
+ 3 FP16        female incl    session1 single R         95       35
+ 4 FP17        male   incl    session1 single L        295       75
+ 5 FP12        female incl    session1 single L        225       75
+ 6 FP11        male   incl    session1 single L        180       65
+ 7 FP9         male   incl    session1 single L        165       80
+ 8 FP14        female incl    session1 single L         87.5     50
+ 9 FP4         female excl    session1 single L        170       45
+10 FP6         female incl    session1 single R        110       40
+# ℹ 29 more rows</code></pre>
+</div>
+</div>
 <section id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.1.1</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</h3>
 <p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2” har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Tabell 1: Prediksjoner fra de ulike modellene</caption>
+<caption>Prediksjoner fra de ulike modellene</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
@@ -407,14 +430,14 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table>
 </div>
 </div>
-<p>I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.</p>
+<p>I tabellen ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.</p>
 </section>
 <section id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="level3" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.1.2</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Tabell 2: 95% prediksjonsintervall for legextension ved legpress = 150 kg</caption>
+<caption>95% prediksjonsintervall for legextension ved legpress = 150 kg</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Sex</th>
@@ -450,19 +473,18 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h1 data-number="3"><span class="header-section-number">3</span> Trekke slutninger</h1>
 <section id="bruk-datasettet-strengtvolume-og-formuler-en-modell-som-gir-oss-et-estimat-på-forskjell-i-gjennomsnitt-mellom-sets-i-forandring-fra-tidspunkt-pre-til-tidspunkt-post-i-legext.-gi-begrunnelse-til-valg-av-modell-og-håndtering-av-data." class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="bruk-datasettet-strengtvolume-og-formuler-en-modell-som-gir-oss-et-estimat-på-forskjell-i-gjennomsnitt-mellom-sets-i-forandring-fra-tidspunkt-pre-til-tidspunkt-post-i-legext.-gi-begrunnelse-til-valg-av-modell-og-håndtering-av-data."><span class="header-section-number">3.1</span> Bruk datasettet strengtvolume og formuler en modell som gir oss et estimat på forskjell i gjennomsnitt mellom sets i forandring fra tidspunkt pre til tidspunkt post i legext. Gi begrunnelse til valg av modell og håndtering av data.</h2>
-<p>Trinnvis beskrivelse av oppgaveløsning:</p>
-<p>Vi løser oppgaven i JASP.</p>
-<p>· Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. · Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. · Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components · I random components valgte vi å se på intercept . · I options huket vi av model summary og fixed effects estimates. · I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. · I tillegg førte vi inn i plots for å illustrere med en graf.</p>
+<p>Følgende del av oppgaven løses i JASP.</p>
+<p>Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. Deretter satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components I random components valgte vi å se på intercept . I options huket vi av model summary og fixed effects estimates. I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. I tillegg førte vi inn i plots for å illustrere med en graf.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Figurer/Mixed_effect.png" class="img-fluid figure-img"></p>
-<figcaption>Tabell 3: Mixed effect modellen</figcaption>
+<figcaption>Mixed effect modellen</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Figurer/Graf.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Graf 3: Linjediagram av mixed-effect modellen. Endring i belastning fra pre- til post. Stiplet linje er single sett, og heltrukket linje er multiple sets</figcaption>
+<figcaption>Linjediagram av mixed-effect modellen. Endring i belastning fra pre- til post. Stiplet linje er single sett, og heltrukket linje er multiple sets</figcaption>
 </figure>
 </div>
 <section id="hvordan-kan-vi-bruke-regresjonsmodellen-for-å-si-noe-om-populasjonen-som-dataene-kommer-fra" class="level3" data-number="3.1.1">
