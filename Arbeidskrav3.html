@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ketil B., Laurits H., Herman E. og Theodor S.">
-<meta name="dcterms.date" content="2026-09-10">
+<meta name="dcterms.date" content="2025-10-30">
 
 <title>Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet</title>
 <style>
@@ -134,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 10, 2026</p>
+      <p class="date">October 30, 2025</p>
     </div>
   </div>
   
@@ -157,20 +157,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="1.1" class="anchored" data-anchor-id="sammenhengen-mellom-to-kontinuerlige-variabler-total-og-kroppsvekt"><span class="header-section-number">1.1</span> Sammenhengen mellom to kontinuerlige variabler (Total og kroppsvekt)</h2>
 <p>Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369r, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> openpowerlifting <span class="sc">|&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>), <span class="co">#Kun kvinner og menn</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots))</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(sample.powerlifting<span class="sc">$</span>TotalKg, sample.powerlifting<span class="sc">$</span>BodyweightKg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Pearson's product-moment correlation
@@ -184,9 +170,6 @@ sample estimates:
       cor 
 0.3390661 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(TotalKg <span class="sc">~</span> BodyweightKg, <span class="at">data =</span> sample.powerlifting)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -207,15 +190,6 @@ Residual standard error: 186.7 on 4998 degrees of freedom
 Multiple R-squared:  0.115, Adjusted R-squared:  0.1148 
 F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sample.powerlifting, <span class="fu">aes</span>(<span class="at">x =</span> BodyweightKg, <span class="at">y =</span> TotalKg)) <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Graf 1: Forhold mellom kroppsvekt og total"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Kroppsvekt (kg)"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total (kg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -228,25 +202,25 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>I modellen TotalKg = 79.93 + 3.35 × BodyweightKg betyr dette at totalen i gjennomsnitt øker med omtrent 3.35 kg for hver ekstra kilo kroppsvekt.</p>
 <p>Det finnes en direkte kobling mellom korrelasjonskoeffisienten og regresjonsmodellen: b1=r×(sy/sx), der s(y) og s(x) ​er standardavvikene til henholdsvis TotalKg og BodyweightKg. Når vi beregner denne forventede stigningstallet ut fra korrelasjonen, får vi nøyaktig samme verdi som i regresjonsmodellen (b_expected = 3,35). Dette viser at analysen er konsistent, og at korrelasjon og regresjon beskriver den samme lineære sammenhengen. Samlet viser analysen en signifikant, men moderat lineær sammenheng mellom kroppsvekt og total løfteprestasjon.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate correlation between bodyweight and total lift</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg, sample.powerlifting<span class="sc">$</span>TotalKg)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate standard deviations of both variables</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sd_y <span class="ot">&lt;-</span> <span class="fu">sd</span>(sample.powerlifting<span class="sc">$</span>TotalKg)       <span class="co"># standard deviation of Total (Y)</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>sd_x <span class="ot">&lt;-</span> <span class="fu">sd</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg)  <span class="co"># standard deviation of Bodyweight (X)</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the expected slope (b) from the correlation</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>b_expected <span class="ot">&lt;-</span> r <span class="sc">*</span> (sd_y <span class="sc">/</span> sd_x)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the expected regression coefficient</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>b_expected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate correlation between bodyweight and total lift</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg, sample.powerlifting<span class="sc">$</span>TotalKg)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate standard deviations of both variables</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sd_y <span class="ot">&lt;-</span> <span class="fu">sd</span>(sample.powerlifting<span class="sc">$</span>TotalKg)       <span class="co"># standard deviation of Total (Y)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sd_x <span class="ot">&lt;-</span> <span class="fu">sd</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg)  <span class="co"># standard deviation of Bodyweight (X)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the expected slope (b) from the correlation</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>b_expected <span class="ot">&lt;-</span> r <span class="sc">*</span> (sd_y <span class="sc">/</span> sd_x)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the expected regression coefficient</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>b_expected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.093326</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mean_y <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample.powerlifting<span class="sc">$</span>TotalKg)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>b0_expected <span class="ot">&lt;-</span> mean_y <span class="sc">-</span> b_expected <span class="sc">*</span> mean_x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample.powerlifting<span class="sc">$</span>BodyweightKg)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mean_y <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample.powerlifting<span class="sc">$</span>TotalKg)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>b0_expected <span class="ot">&lt;-</span> mean_y <span class="sc">-</span> b_expected <span class="sc">*</span> mean_x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sammenhengen-mellom-total-kjønn-og-alder" class="level2" data-number="1.2">
@@ -256,23 +230,23 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Siden “openpowerlifting” datasettet inneholder over tre millioner rader, må vi filtrere dataene slik at de er mer håndterbare å lage modeller og grafer med. Vi valgte dermed å filtrere et utvalg på 5000 observasjoner.</p>
 <p>Vi testet både en lineær og en polynomial regresjonsmodell. Det viste seg at den polynomiale modellen var mer passende, ettersom den lineære modellen viste en negativ korrelasjon mellom alder og total, som er fysiologisk svært usannsynlig (en 15-åring ville vært sterkere enn en 25 åring i gjennomsnitt med den lineære modellen). Ved bruk av den polynomiale modellen derimot, ser at vi totalen øker med økende alder til et visst punkt, før den igjen synker, og indikerer at det er et kurvilineært forhold.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer homogen målgruppe</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> openpowerlifting <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>),<span class="co">#Kun kvinner og menn</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filtrerer datasettet slik at det er mer håndterbart og gjelder en mer homogen målgruppe</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>powerlifting.clean <span class="ot">&lt;-</span> openpowerlifting <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(TotalKg),  <span class="co">#Har en registrert total</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    TotalKg <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>),<span class="co">#Kun kvinner og menn</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og en graf.</p>
 <p><em>Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke uavhengig av kjønn</em></p>
@@ -336,17 +310,6 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft godkjent eller ikke. Variabelen”Deadlift3Kg” i datasettet blir brukt for å lage vår binære utfallsvariabel “Deadlift3_success”. I openpowerlifting-datasettet, så har et godkjent løft en positiv verdi (eks: 120), og et ikke-godkjent løft en negativ verdi (eks: -120). Vi kan dermed definere utfallsvariabelen som 1 for godkjent løft hvis variabelen “Deadlift3Kg” &gt; 0, og som 0 for ikke-godkjent løft hvis “Deadlift3Kg” &lt; 0. Hvis verdien til variabelen er “NA”, betyr det at løftet ikke ble forsøkt, og disse verdiene blir ekskludert fra modellen.</p>
 <p>I modellen vår blir den uavhengige variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke. Vi vil dermed forvente en negativ koeffisient.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>powerlifting.clean2 <span class="ot">&lt;-</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  powerlifting.clean <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Deadlift3_success =</span> <span class="fu">ifelse</span>(Deadlift3Kg <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Deadlift3_success)) <span class="sc">|&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Deadlift3attempt =</span> <span class="fu">abs</span>(Deadlift3Kg))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>GLM_modell <span class="ot">&lt;-</span> <span class="fu">glm</span>(Deadlift3_success <span class="sc">~</span> Deadlift3attempt,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> powerlifting.clean2,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(GLM_modell) <span class="sc">|&gt;</span>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -376,11 +339,6 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </tbody>
 </table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(powerlifting.clean2, <span class="fu">aes</span>(<span class="at">x =</span> Deadlift3attempt, <span class="at">y =</span> Deadlift3_success)) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>, <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"binomial"</span>)) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Sannsynlighet for suksess"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Vekt (kg)"</span>, <span class="at">y =</span> <span class="st">"Sannsynlighet for suksess"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -399,14 +357,14 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress." class="level3" data-number="2.0.1">
 <h3 data-number="2.0.1" class="anchored" data-anchor-id="bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress."><span class="header-section-number">2.0.1</span> Bruk data fra datasettet strengthvolume og lag en prediksjonsmodell for legext basert på legpress.</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi må først filtrere datasettet</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="ot">&lt;-</span> strengthvolume <span class="sc">|&gt;</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(exercise <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"legpress"</span>, <span class="st">"legext"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> exercise,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> load)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjonsmodell for legext basert på legpress</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ext.m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress, <span class="at">data =</span> Legext_modell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi må først filtrere datasettet</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="ot">&lt;-</span> strengthvolume <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(exercise <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"legpress"</span>, <span class="st">"legext"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> exercise,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> load)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjonsmodell for legext basert på legpress</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ext.m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress, <span class="at">data =</span> Legext_modell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" class="level2" data-number="2.1">
@@ -415,26 +373,6 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.1.1</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</h3>
 <p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2” har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>       1 
-51.12457 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       1 
-67.53951 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      1 
-50.4837 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      1 
-68.6434 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       1 
-56.20788 </code></pre>
-</div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Tabell 1: Prediksjoner fra de ulike modellene</caption>
@@ -503,7 +441,7 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Prediksjonsintervallet vårt forteller oss hvilke verdier vi kan forvente for legextension når en deltaker klarer 150 kg i legpress, både for kvinnelig og mannlig kjønn.</p>
-<p>Hvis en kvinne tar 150kg i legpress, forventer vi at nye kvinner har en 95% sannsynlighet for å få en legextension verdi mellom 27 og 75kg. Modellen viser oss en gjennomsnittlig prediksjon på 51kg. Hvis en mann tar 150 kg i legpress, forventer vi nye menn har en 95% sannsynlighet for å få en legextension verdi mellom 43 og 91 kg. Modellen viser oss en gjennomsnittlig prediksjon på 68 kg.</p>
+<p>Hvis en kvinne tar 150kg i legpress, forventer vi at nye observasjoner forkvinner har en 95% sannsynlighet for å få en legextension verdi mellom 27 og 75kg. Modellen viser oss en gjennomsnittlig prediksjon på 51kg. Hvis en mann tar 150 kg i legpress, forventer vi at nye observasjoner for menn har en 95% sannsynlighet for å få en legextension verdi mellom 43 og 91 kg. Modellen viser oss en gjennomsnittlig prediksjon på 68 kg.</p>
 <p>Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for legextension når legpress er 150kg, for begge kjønn. Dette kan tyde på store individuelle forskjeller, selv ved samme legpress verdier.</p>
 </section>
 </section>
@@ -513,7 +451,8 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="bruk-datasettet-strengtvolume-og-formuler-en-modell-som-gir-oss-et-estimat-på-forskjell-i-gjennomsnitt-mellom-sets-i-forandring-fra-tidspunkt-pre-til-tidspunkt-post-i-legext.-gi-begrunnelse-til-valg-av-modell-og-håndtering-av-data." class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="bruk-datasettet-strengtvolume-og-formuler-en-modell-som-gir-oss-et-estimat-på-forskjell-i-gjennomsnitt-mellom-sets-i-forandring-fra-tidspunkt-pre-til-tidspunkt-post-i-legext.-gi-begrunnelse-til-valg-av-modell-og-håndtering-av-data."><span class="header-section-number">3.1</span> Bruk datasettet strengtvolume og formuler en modell som gir oss et estimat på forskjell i gjennomsnitt mellom sets i forandring fra tidspunkt pre til tidspunkt post i legext. Gi begrunnelse til valg av modell og håndtering av data.</h2>
 <p>Trinnvis beskrivelse av oppgaveløsning:</p>
-<p>Vi løser oppgaven i JASP. · Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. · Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. · Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components · I random components valgte vi å se på intercept . · I options huket vi av model summary og fixed effects estimates. · I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. · I tillegg førte vi inn i plots for å illustrere med en graf.</p>
+<p>Vi løser oppgaven i JASP.</p>
+<p>· Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. · Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. · Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components · I random components valgte vi å se på intercept . · I options huket vi av model summary og fixed effects estimates. · I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. · I tillegg førte vi inn i plots for å illustrere med en graf.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Figurer/Mixed_effect.png" class="img-fluid figure-img"></p>
@@ -523,7 +462,7 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Figurer/Graf.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Graf 3: Linjediagram av mixed-effect modellen. Endring i load fra pre- til post</figcaption>
+<figcaption>Graf 3: Linjediagram av mixed-effect modellen. Endring i belastning fra pre- til post. Stiplet linje er single sett, og heltrukket linje er multiple sets</figcaption>
 </figure>
 </div>
 <section id="hvordan-kan-vi-bruke-regresjonsmodellen-for-å-si-noe-om-populasjonen-som-dataene-kommer-fra" class="level3" data-number="3.1.1">

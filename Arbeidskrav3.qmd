@@ -1,9 +1,9 @@
 ---
 title: "Arbeidskrav 3: Statistisk analyse av Openpowerlifting datasettet"
 author: Ketil B., Laurits H., Herman E. og Theodor S.
-date: 21/10/25
+date: 2025-10-30
 format:
-  html:
+  pdf:
     toc: true
     toc-location: right
     toc-title: "Innhold"
@@ -43,6 +43,9 @@ openpowerlifting <- read.csv("C:/Users/Ketil/Downloads/openpowerlifting.csv")
 Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369r, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.
 
 ```{r}
+#| echo: false
+#| message: false
+#| warning: false
 
 powerlifting.clean <- openpowerlifting |>
   filter(
@@ -183,6 +186,7 @@ Vi tar utgangspunkt i om løfteren har fått det tredje løftet sitt i markløft
 I modellen vår blir den uavhengige variabelen absolutt vekt forsøkt i markløft (Deadlift3attempt). Vi kan anta at med økende vekt, så vil sannsynligheten for å få et godkjent løft synke. Vi vil dermed forvente en negativ koeffisient.
 
 ```{r}
+#| echo: false
 #| message: false
 #| warning: false
 powerlifting.clean2 <- 
@@ -210,10 +214,9 @@ Vi får følgende estimater i modellen vår, med skjæringspunkt = 1,7 og et sti
 
 I den logistiske regresjonsmodellen, så ønsker vi å se på sannsynligheten for et utfall ved hjelp av en lineær regresjonsmodell. Problemet med dette, er at sannsynligheten må alltid ha en verdi mellom 0 og 1, og en lineær regresjon kan gi oss verdier langt utenfor dette spennet. "Link-function" fungerer som en bro, ved at den transformerer sannsynligheter om til log-odds, som kan være verdier utenfor 0 til 1. Dermed kan vi fortsatt bruke den kraftige lineære regresjonsmodellen selv på binære utfall, ved hjelp av denne funksjonen.
 
-# Predikere observasjoner 
+# Predikere observasjoner
 
 ### Bruk data fra datasettet strengthvolume og lag en prediksjonsmodell for legext basert på legpress.
-
 
 ```{r}
 #Vi må først filtrere datasettet
@@ -241,7 +244,7 @@ Legext_modell |>
 
 ### Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?
 
-Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet. 
+Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet.
 
 ```{r}
 #| echo: false
@@ -252,40 +255,33 @@ ext.m3 <- lm(legext ~ legpress + sex + sex:legpress, data = Legext_modell)
 
 #Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg
 
-predict(ext.m2, newdata = data.frame(legpress = 150,
+pred.m2female <- predict(ext.m2, newdata = data.frame(legpress = 150,
                                       sex = "female")) 
-predict(ext.m2, newdata = data.frame(legpress = 150,
+pred.m2male <- predict(ext.m2, newdata = data.frame(legpress = 150,
                                      sex = "male"))
 
 #Prediksjoner innad kjønn MED interaksjonseffekt. Vi bruker ext.m3 modellen.
 
-predict(ext.m3, newdata = data.frame(legpress = 150,
+pred.m3female <- predict(ext.m3, newdata = data.frame(legpress = 150,
                                      sex = "female"))
-predict(ext.m3, newdata = data.frame(legpress = 150,
+pred.m3male <- predict(ext.m3, newdata = data.frame(legpress = 150,
                                      sex = "male"))
 
 #Prediksjoner i gjennomsnitt i begge kjønn. Her bruker vi ext.m1 som gir oss en gjennomsnittlig verdi på tvers av kjønnene
 
-predict(ext.m1, newdata = data.frame(legpress = 150))
+pred.m1average <- predict(ext.m1, newdata = data.frame(legpress = 150))
 
 
 Prediksjoner <- data.frame(
   Model = c("m1 (average)", "m2 (female)", "m2 (male)", "m3 (female)", "m3 (male)"),
-  Prediction = c(
-    predict(ext.m1, newdata = data.frame(legpress = 150)),
-    predict(ext.m2, newdata = data.frame(legpress = 150, sex = "female")),
-    predict(ext.m2, newdata = data.frame(legpress = 150, sex = "male")),
-    predict(ext.m3, newdata = data.frame(legpress = 150, sex = "female")),
-    predict(ext.m3, newdata = data.frame(legpress = 150, sex = "male"))
-  )
+  Prediction = c(pred.m1average, pred.m2female, pred.m2male, pred.m3female, pred.m3male)
 )
 
 knitr::kable(Prediksjoner, digits = 2, caption = "Tabell 1: Prediksjoner fra de ulike modellene")
   
 ```
 
-I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom  menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner. 
-
+I tabell 1 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.
 
 ### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
 
@@ -317,9 +313,9 @@ knitr::kable(pred_intervals, digits = 2,
 
 Prediksjonsintervallet vårt forteller oss hvilke verdier vi kan forvente for legextension når en deltaker klarer 150 kg i legpress, både for kvinnelig og mannlig kjønn.
 
-Hvis en kvinne tar 150kg i legpress, forventer vi at nye kvinner har en 95% sannsynlighet for å få en legextension verdi mellom 27 og 75kg. Modellen viser oss en gjennomsnittlig prediksjon på 51kg. Hvis en mann tar 150 kg i legpress, forventer vi nye menn har en 95% sannsynlighet for å få en legextension verdi mellom 43 og 91 kg. Modellen viser oss en gjennomsnittlig prediksjon på 68 kg.
+Hvis en kvinne tar 150kg i legpress, forventer vi at nye observasjoner forkvinner har en 95% sannsynlighet for å få en legextension verdi mellom 27 og 75kg. Modellen viser oss en gjennomsnittlig prediksjon på 51kg. Hvis en mann tar 150 kg i legpress, forventer vi at nye observasjoner for menn har en 95% sannsynlighet for å få en legextension verdi mellom 43 og 91 kg. Modellen viser oss en gjennomsnittlig prediksjon på 68 kg.
 
-Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for legextension når legpress er 150kg, for begge kjønn. Dette kan tyde på store individuelle forskjeller, selv ved samme legpress verdier. 
+Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for legextension når legpress er 150kg, for begge kjønn. Dette kan tyde på store individuelle forskjeller, selv ved samme legpress verdier.
 
 # Trekke slutninger
 
@@ -328,18 +324,19 @@ Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for 
 Trinnvis beskrivelse av oppgaveløsning:
 
 Vi løser oppgaven i JASP. 
-·	Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. 
-·	Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. 
-·	Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components
-·	I random components valgte vi å se på intercept .
-·	I options huket vi av model summary og fixed effects estimates.
-·	I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show.
-·	I tillegg førte vi inn i plots for å illustrere med en graf.
+
+· Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. 
+· Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. 
+· Så satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components 
+· I random components valgte vi å se på intercept . 
+· I options huket vi av model summary og fixed effects estimates. 
+· I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. 
+· I tillegg førte vi inn i plots for å illustrere med en graf.
 
 ![Tabell 3: Mixed effect modellen](Figurer/Mixed_effect.png)
 
-![Graf 3: Linjediagram av mixed-effect modellen. Endring i load fra pre- til post](Figurer/Graf.png){width=50%}
+![Graf 3: Linjediagram av mixed-effect modellen. Endring i belastning fra pre- til post. Stiplet linje er single sett, og heltrukket linje er multiple sets](Figurer/Graf.png){width="50%"}
 
-### Hvordan kan vi bruke regresjonsmodellen for å si noe om populasjonen som dataene kommer fra? 
+### Hvordan kan vi bruke regresjonsmodellen for å si noe om populasjonen som dataene kommer fra?
 
-Vi kan bruke regresjonsmodellen for å si noe om at det er en klar tidseffekt fra pre til post tester. Observasjonene fra modellen viser oss også forskjellen mellom økning i single og multiple sets fra pre til post på modellen ser vi at økningen er større i flere sets. Forskjellen mellom single og multiple sets på baseline er ubetydelig (p=0.809). 
+Vi kan bruke regresjonsmodellen for å si noe om at det er en klar tidseffekt fra pre til post tester. Observasjonene fra modellen viser oss også forskjellen mellom økning i single og multiple sets fra pre til post på modellen ser vi at økningen er større i flere sets. Forskjellen mellom single og multiple sets på baseline er ubetydelig (p=0.809).
