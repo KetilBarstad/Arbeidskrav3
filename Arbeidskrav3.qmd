@@ -145,6 +145,8 @@ Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og en graf.
 
 m <- lm(TotalKg ~ Sex + Age + I(Age^2), data = sample.powerlifting)
 
+predict(m, newdata = data.frame(Sex="F", Age = 0))
+
 tidy(m) |>
   mutate(p.value = format.pval(p.value, digits = 2, eps = 0.001)) |>
   select(term, estimate, p.value) |>
@@ -166,9 +168,20 @@ Alle koeffisientene har en p-verdi på \<0.001, som betyr at både kjønn og ald
 #| echo: false
 #| message: false
 #| warning: false
+
+#Først må vi genere et datasett med prediskjoner modellen vår
+prediksjoner <- seq(from = 15, to = 80, length.out = 100)
+pred_data <- data.frame(
+  Age = rep(prediksjoner, times = 2),
+  Sex = rep(c("M", "F"), each = 100)
+)
+
+pred_data$predicted_total <- predict(m, newdata = pred_data)
+
+#Graf av modell 'm'
 ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
   geom_point(alpha = 0.2, size = 0.8) +
-  geom_smooth(method = "lm", se = FALSE, formula = y ~ x + I(x^2)) +
+  geom_line(data = pred_data, aes(y = predicted_total), linewidth = 1) +
   labs(
     title = "Polynomialregresjon",
     x = "Alder",
@@ -176,6 +189,11 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
   ) +
   theme_minimal()
 ```
+
+*Rettelser etter tilbakemelding*: Den opprinnelig grafen viste ikke det samme som modellen vår. Modellen vår gjør en antagelse om at alder har samme effekt på total for begge kjønn, som tilsier at de to kurvene burde være parallele med ulike skjæringspunkt. I den opprinnelig grafen, så vi at linjene til menn og kvinner begynte å konvergere. Feilen var å bruke 'formula = y ~ x + I(x^2)', som fører til at vi får ulike koeffisienter for variabelene våre for menn og kvinner. 
+
+For å rette opp i dette, har vi lagd en ny dataramme med modellen vår, m, og produsert predikterte verdier for ulike totaler. Deretter har vi plottet dette, og fått en graf der vi får to parallele kurver for menn og kvinner.
+
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
 
