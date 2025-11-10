@@ -30,6 +30,7 @@ Begreper som brukes videre i denne analysen:
 #Last inn nødvendige pakker
 library(tidyverse)
 library(readxl)
+library(gt)
 library(broom)
 library(knitr)
 library(exscidata)
@@ -40,7 +41,7 @@ openpowerlifting <- read.csv("C:/Users/Ketil/Downloads/openpowerlifting.csv")
 
 ```
 
-Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369r, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.
+Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.
 
 ```{r}
 #| echo: false
@@ -124,7 +125,8 @@ powerlifting.clean <- openpowerlifting |>
     Equipment == "Raw", #Utstyrsfritt
     !is.na(Tested), #Dopingtestet
     Sex %in% c("M", "F"),#Kun kvinner og menn
-    !is.na(Dots)
+    !is.na(Dots),
+    Event == "SBD"
     )
 
 #Vi tar et tilfeldig utvalg "powerlifting.clean"
@@ -190,10 +192,11 @@ ggplot(sample.powerlifting, aes(x = Age, y = TotalKg, color = Sex)) +
   theme_minimal()
 ```
 
-*Rettelser etter tilbakemelding*: Den opprinnelig grafen viste ikke det samme som modellen vår. Modellen vår gjør en antagelse om at alder har samme effekt på total for begge kjønn, som tilsier at de to kurvene burde være parallele med ulike skjæringspunkt. I den opprinnelig grafen, så vi at linjene til menn og kvinner begynte å konvergere. Feilen var å bruke 'formula = y ~ x + I(x^2)', som fører til at vi får ulike koeffisienter for variabelene våre for menn og kvinner. 
+**Rettelser etter tilbakemeldingen**: Den opprinnelig grafen viste ikke det samme som modellen vår. Modellen vår gjør en antagelse om at alder har samme effekt på total for begge kjønn, som tilsier at de to kurvene burde være parallele med ulike skjæringspunkt. I den opprinnelig grafen, så vi at linjene til menn og kvinner begynte å konvergere. Feilen var å bruke 'formula = y \~ x + I(x\^2)', som fører til at vi får ulike koeffisienter for variabelene våre for menn og kvinner.
 
 For å rette opp i dette, har vi lagd en ny dataramme med modellen vår, m, og produsert predikterte verdier for ulike totaler. Deretter har vi plottet dette, og fått en graf der vi får to parallele kurver for menn og kvinner.
 
+Når det gjelder de to "clusterene" per kjønn, har vi oppdaget en kritisk mangel i filteringsprosessen av datasettet. Openpowerlifting-datasettet har en "event"-kolonne, som inkluderer komplette styrkeløftstevner ('SBD'), men også markløft, ('D') og benkpress ('B') ekslusive stevner. Et komplett styrkeløftstevne vil ha 2 til 3 ganger høyere verdier sammenlignet med enkeltløftstevner, og gjør dermed den opprinnelig modellen vår ugyldig. Vi har dermed endret filtreringen til kun "SBD", og dermed forsvinner "clusterene" i grafen vår.
 
 ## Hvordan kan vi tolke estimatet i en generalisert lineær modell hvor den avhengige variabelen er enten 1 eller 0? Hva betyr «link-function» i denne sammenhengen og hva gjør den?
 
@@ -262,13 +265,16 @@ Legext_modell |>
 
 ### Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?
 
-Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2" har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet.
+Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, "ext.m2", har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens "ext.m3" har en interaksjonseffekt mellom kjønn og legpress på legextension. Vi tar utgangspunkt i en legpress på 150 kg, og predikerer legextension verdier for både menn og kvinner i de tre modellene. 
 
 ```{r}
-#| echo: false
+#| echo: true
 #| paged-print: true
+
+#Modell med kjønn som variabel, uten interkasjonseffekt på legpress
 ext.m2 <- lm(legext ~ legpress + sex, data = Legext_modell)
 
+#Modell med kjønn som variabel, med interaksjonseffekt på legpress
 ext.m3 <- lm(legext ~ legpress + sex + sex:legpress, data = Legext_modell)
 
 #Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg
@@ -289,17 +295,19 @@ pred.m3male <- predict(ext.m3, newdata = data.frame(legpress = 150,
 
 pred.m1average <- predict(ext.m1, newdata = data.frame(legpress = 150))
 
-
-Prediksjoner <- data.frame(
+Prediksjoner2 <- data.frame(
   Model = c("m1 (average)", "m2 (female)", "m2 (male)", "m3 (female)", "m3 (male)"),
   Prediction = c(pred.m1average, pred.m2female, pred.m2male, pred.m3female, pred.m3male)
 )
 
-knitr::kable(Prediksjoner, digits = 2, caption = "Prediksjoner fra de ulike modellene")
-  
+knitr::kable(Prediksjoner2, digits = 2, caption = "Prediksjoner fra de ulike modellene ved legpress = 150")
+
+ANOVA <- anova(ext.m2, ext.m3)
+tidy(ANOVA) |>
+  gt()
 ```
 
-I tabellen ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.
+I tabellen ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel ser det ut til at m3 og m2 gir oss nesten identiske verdier. Vi utførte dermed en ANOVA-test mellom modell ext.m2 og ext.m3, som viste at det ikke var statistisk signifikant forskjell mellom modellene (F = 2.38, p = 0.124). Dette tyder på at effekten av legpress på legextension er tilnærmet lik mellom kjønnene, og dermed er den enklere modellen foretrukket basert på prinsippet om parsimoni (Okasha, 2016, s. 25 - 26). I modell m1, som ikke inkluderer kjønn som prediktor, får vi en prediksjonsverdi for legextension basert på legpress, uavhengig av kjønn. 
 
 ### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
 
@@ -339,7 +347,7 @@ Prediksjonsintervaller viser oss at det er et stort spenn av mulige verdier for 
 
 ## Bruk datasettet strengtvolume og formuler en modell som gir oss et estimat på forskjell i gjennomsnitt mellom sets i forandring fra tidspunkt pre til tidspunkt post i legext. Gi begrunnelse til valg av modell og håndtering av data.
 
-Følgende del av oppgaven løses i JASP.  
+Følgende del av oppgaven løses i JASP.
 
 Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre” og “post” i “time”, samt ga de en tallverdi 1 – 2. i “exercise” fjernet vi alle øvelser unntatt legext. Videre gikk vi inn på linear mixed model, satte “load” som dependent variable, “sets” og “time” i fixed effects variables, og “participants” i random effects grouping factors. Deretter satte vi inn “sets” og “time”, og “sets x time” inn som ulike model components I random components valgte vi å se på intercept . I options huket vi av model summary og fixed effects estimates. I plots for å få selve modellen satte vi inn «time» i den horisontale aksen, «sets» i seperate lines for å skille mellom pre og post, og «participants» inn i background data show. I tillegg førte vi inn i plots for å illustrere med en graf.
 

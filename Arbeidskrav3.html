@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Utstyrsfritt</strong>: Det innebærer at man kun kan bruke et enkelt lag løftebelte (10 - 13mm bredde), myke knevarmere, håndleddsstøtter og drakt uten støtte. Alt annet utstyr er ikke tillatt.</p>
 <section id="sammenhengen-mellom-to-kontinuerlige-variabler-total-og-kroppsvekt" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sammenhengen-mellom-to-kontinuerlige-variabler-total-og-kroppsvekt"><span class="header-section-number">1.1</span> Sammenhengen mellom to kontinuerlige variabler (Total og kroppsvekt)</h2>
-<p>Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369r, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.</p>
+<p>Sammenhengen mellom to kontinuerlige variabler kan beskrives ved hjelp av korrelasjon og lineær regresjon. Korrelasjonskoeffisienten (r) viser styrken og retningen på den sammenhengen mellom de to variablene, og varierer mellom -1 og 1. I dette tilfellet er korrelasjonen mellom kroppsvekt og total løftet mengde r=0.369, noe som indikerer en moderat positiv sammenheng. Løftere med høyere kroppsvekt har en tendens til å løfte mer totalt.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -239,18 +239,23 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    Equipment <span class="sc">==</span> <span class="st">"Raw"</span>, <span class="co">#Utstyrsfritt</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Tested), <span class="co">#Dopingtestet</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"M"</span>, <span class="st">"F"</span>),<span class="co">#Kun kvinner og menn</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Dots),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    Event <span class="sc">==</span> <span class="st">"SBD"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi tar et tilfeldig utvalg "powerlifting.clean"</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>sample.powerlifting <span class="ot">&lt;-</span> powerlifting.clean <span class="sc">|&gt;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nå som vi har filtrert datasettet, kan vi lage en regresjonsmodell og en graf.</p>
 <p><em>Merk: Med denne regresjonsmodellen gjør vi en antagelse at alder har en lik effekt på maksimalstyrke uavhengig av kjønn</em></p>
 <div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+38.18511 </code></pre>
+</div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
@@ -263,22 +268,22 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">124.543</td>
+<td style="text-align: right;">38.185</td>
 <td style="text-align: left;">&lt;0.001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SexM</td>
-<td style="text-align: right;">143.822</td>
+<td style="text-align: right;">237.415</td>
 <td style="text-align: left;">&lt;0.001</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Age</td>
-<td style="text-align: right;">9.553</td>
+<td style="text-align: right;">17.002</td>
 <td style="text-align: left;">&lt;0.001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">I(Age^2)</td>
-<td style="text-align: right;">-0.155</td>
+<td style="text-align: right;">-0.230</td>
 <td style="text-align: left;">&lt;0.001</td>
 </tr>
 </tbody>
@@ -302,6 +307,9 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
+<p><strong>Rettelser etter tilbakemeldingen</strong>: Den opprinnelig grafen viste ikke det samme som modellen vår. Modellen vår gjør en antagelse om at alder har samme effekt på total for begge kjønn, som tilsier at de to kurvene burde være parallele med ulike skjæringspunkt. I den opprinnelig grafen, så vi at linjene til menn og kvinner begynte å konvergere. Feilen var å bruke ‘formula = y ~ x + I(x^2)’, som fører til at vi får ulike koeffisienter for variabelene våre for menn og kvinner.</p>
+<p>For å rette opp i dette, har vi lagd en ny dataramme med modellen vår, m, og produsert predikterte verdier for ulike totaler. Deretter har vi plottet dette, og fått en graf der vi får to parallele kurver for menn og kvinner.</p>
+<p>Når det gjelder de to “clusterene” per kjønn, har vi oppdaget en kritisk mangel i filteringsprosessen av datasettet. Openpowerlifting-datasettet har en “event”-kolonne, som inkluderer komplette styrkeløftstevner (‘SBD’), men også markløft, (‘D’) og benkpress (‘B’) ekslusive stevner. Et komplett styrkeløftstevne vil ha 2 til 3 ganger høyere verdier sammenlignet med enkeltløftstevner, og gjør dermed den opprinnelig modellen vår ugyldig. Vi har dermed endret filtreringen til kun “SBD”, og dermed forsvinner “clusterene” i grafen vår.</p>
 </section>
 </section>
 <section id="hvordan-kan-vi-tolke-estimatet-i-en-generalisert-lineær-modell-hvor-den-avhengige-variabelen-er-enten-1-eller-0-hva-betyr-link-function-i-denne-sammenhengen-og-hva-gjør-den" class="level2" data-number="1.3">
@@ -324,16 +332,16 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">1.763</td>
-<td style="text-align: right;">0.008</td>
-<td style="text-align: right;">220.813</td>
+<td style="text-align: right;">1.776</td>
+<td style="text-align: right;">0.009</td>
+<td style="text-align: right;">200.735</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Deadlift3attempt</td>
 <td style="text-align: right;">-0.006</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">-167.043</td>
+<td style="text-align: right;">-148.520</td>
 <td style="text-align: right;">0</td>
 </tr>
 </tbody>
@@ -357,24 +365,24 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress." class="level3" data-number="2.0.1">
 <h3 data-number="2.0.1" class="anchored" data-anchor-id="bruk-data-fra-datasettet-strengthvolume-og-lag-en-prediksjonsmodell-for-legext-basert-på-legpress."><span class="header-section-number">2.0.1</span> Bruk data fra datasettet strengthvolume og lag en prediksjonsmodell for legext basert på legpress.</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi må først filtrere datasettet</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="ot">&lt;-</span> strengthvolume <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(exercise <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"legpress"</span>, <span class="st">"legext"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> exercise,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> load)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjonsmodell for legext basert på legpress</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ext.m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress, <span class="at">data =</span> Legext_modell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Vi må først filtrere datasettet</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="ot">&lt;-</span> strengthvolume <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(exercise <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"legpress"</span>, <span class="st">"legext"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> exercise,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> load)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjonsmodell for legext basert på legpress</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ext.m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress, <span class="at">data =</span> Legext_modell)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="bruk-data-fra-et-tidspunkt-time-og-et-treningsvolum-sets"><span class="header-section-number">2.1</span> Bruk data fra et tidspunkt (time) og et treningsvolum (sets)</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    time <span class="sc">==</span> <span class="st">"session1"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    sets <span class="sc">==</span> <span class="st">"single"</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Legext_modell <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    time <span class="sc">==</span> <span class="st">"session1"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    sets <span class="sc">==</span> <span class="st">"single"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 39 × 8
    participant sex    include time     sets   leg   legpress legext
@@ -394,11 +402,41 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <section id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="hvordan-spiller-kjønn-sex-inn-på-prediksjonen-hvordan-kan-du-bruke-kjønn-for-å-si-noe-om-prediksjoner-innad-kjønn-og-i-gjennomsnitt-i-begge-kjønn"><span class="header-section-number">2.1.1</span> Hvordan spiller kjønn (sex) inn på prediksjonen, hvordan kan du bruke kjønn for å si noe om prediksjoner innad kjønn og i gjennomsnitt i begge kjønn?</h3>
-<p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2” har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og legpress på legextension. La oss se hva modellene viser oss, og hvilken som er mest egnet.</p>
+<p>Vi trenger to modeller for å svare på dette spørsmålet. Den første modellen, “ext.m2”, har ingen interaksjonseffekt mellom kjønn og legpress på legextension, mens “ext.m3” har en interaksjonseffekt mellom kjønn og legpress på legextension. Vi tar utgangspunkt i en legpress på 150 kg, og predikerer legextension verdier for både menn og kvinner i de tre modellene.</p>
 <div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Modell med kjønn som variabel, uten interkasjonseffekt på legpress</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ext.m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress <span class="sc">+</span> sex, <span class="at">data =</span> Legext_modell)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Modell med kjønn som variabel, med interaksjonseffekt på legpress</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ext.m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(legext <span class="sc">~</span> legpress <span class="sc">+</span> sex <span class="sc">+</span> sex<span class="sc">:</span>legpress, <span class="at">data =</span> Legext_modell)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>pred.m2female <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">sex =</span> <span class="st">"female"</span>)) </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>pred.m2male <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"male"</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner innad kjønn MED interaksjonseffekt. Vi bruker ext.m3 modellen.</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>pred.m3female <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"female"</span>))</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>pred.m3male <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m3, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">sex =</span> <span class="st">"male"</span>))</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Prediksjoner i gjennomsnitt i begge kjønn. Her bruker vi ext.m1 som gir oss en gjennomsnittlig verdi på tvers av kjønnene</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>pred.m1average <span class="ot">&lt;-</span> <span class="fu">predict</span>(ext.m1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">legpress =</span> <span class="dv">150</span>))</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>Prediksjoner2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"m1 (average)"</span>, <span class="st">"m2 (female)"</span>, <span class="st">"m2 (male)"</span>, <span class="st">"m3 (female)"</span>, <span class="st">"m3 (male)"</span>),</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Prediction =</span> <span class="fu">c</span>(pred.m1average, pred.m2female, pred.m2male, pred.m3female, pred.m3male)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Prediksjoner2, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Prediksjoner fra de ulike modellene ved legpress = 150"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Prediksjoner fra de ulike modellene</caption>
+<caption>Prediksjoner fra de ulike modellene ved legpress = 150</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
@@ -429,8 +467,498 @@ F-statistic: 649.2 on 1 and 4998 DF,  p-value: &lt; 2.2e-16</code></pre>
 </tbody>
 </table>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ANOVA <span class="ot">&lt;-</span> <span class="fu">anova</span>(ext.m2, ext.m3)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ANOVA) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="jnomequwum" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jnomequwum table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jnomequwum thead, #jnomequwum tbody, #jnomequwum tfoot, #jnomequwum tr, #jnomequwum td, #jnomequwum th {
+  border-style: none;
+}
+
+#jnomequwum p {
+  margin: 0;
+  padding: 0;
+}
+
+#jnomequwum .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jnomequwum .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jnomequwum .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jnomequwum .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jnomequwum .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jnomequwum .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jnomequwum .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jnomequwum .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jnomequwum .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jnomequwum .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jnomequwum .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jnomequwum .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jnomequwum .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jnomequwum .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jnomequwum .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jnomequwum .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jnomequwum .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jnomequwum .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jnomequwum .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jnomequwum .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jnomequwum .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jnomequwum .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jnomequwum .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jnomequwum .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jnomequwum .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jnomequwum .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jnomequwum .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jnomequwum .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jnomequwum .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jnomequwum .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jnomequwum .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jnomequwum .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jnomequwum .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jnomequwum .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jnomequwum .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jnomequwum .gt_left {
+  text-align: left;
+}
+
+#jnomequwum .gt_center {
+  text-align: center;
+}
+
+#jnomequwum .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jnomequwum .gt_font_normal {
+  font-weight: normal;
+}
+
+#jnomequwum .gt_font_bold {
+  font-weight: bold;
+}
+
+#jnomequwum .gt_font_italic {
+  font-style: italic;
+}
+
+#jnomequwum .gt_super {
+  font-size: 65%;
+}
+
+#jnomequwum .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jnomequwum .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jnomequwum .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jnomequwum .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jnomequwum .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jnomequwum .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jnomequwum .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jnomequwum .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jnomequwum div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="df.residual" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">df.residual</th>
+<th id="rss" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">rss</th>
+<th id="df" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">df</th>
+<th id="sumsq" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">sumsq</th>
+<th id="statistic" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">statistic</th>
+<th id="p.value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">p.value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">legext ~ legpress + sex</td>
+<td class="gt_row gt_right" headers="df.residual">387</td>
+<td class="gt_row gt_right" headers="rss">57862.69</td>
+<td class="gt_row gt_right" headers="df">NA</td>
+<td class="gt_row gt_right" headers="sumsq">NA</td>
+<td class="gt_row gt_right" headers="statistic">NA</td>
+<td class="gt_row gt_right" headers="p.value">NA</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">legext ~ legpress + sex + sex:legpress</td>
+<td class="gt_row gt_right" headers="df.residual">386</td>
+<td class="gt_row gt_right" headers="rss">57508.60</td>
+<td class="gt_row gt_right" headers="df">1</td>
+<td class="gt_row gt_right" headers="sumsq">354.0907</td>
+<td class="gt_row gt_right" headers="statistic">2.376671</td>
+<td class="gt_row gt_right" headers="p.value">0.1239792</td>
+</tr>
+</tbody>
+</table>
+
 </div>
-<p>I tabellen ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel, ser det ut til at m3 og m2 gir nesten nøyaktig like prediksjoner, som betyr at mest sannsynlig er ikke interaksjonseffekten særlig viktig. Vi kan dermed si at m2 er tilstrekkelig for våre behov. I modell m1, som ikke inkluderer kjønn, ser vi at vi får et gjennomsnitt som ligger mellom verdiene til menn og kvinner.</p>
+</div>
+</div>
+<p>I tabellen ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel ser det ut til at m3 og m2 gir oss nesten identiske verdier. Vi utførte dermed en ANOVA-test mellom modell ext.m2 og ext.m3, som viste at det ikke var statistisk signifikant forskjell mellom modellene (F = 2.38, p = 0.124). Dette tyder på at effekten av legpress på legextension er tilnærmet lik mellom kjønnene, og dermed er den enklere modellen foretrukket basert på prinsippet om parsimoni (Okasha, 2016, s. 25 - 26). I modell m1, som ikke inkluderer kjønn som prediktor, får vi en prediksjonsverdi for legextension basert på legpress, uavhengig av kjønn.</p>
 </section>
 <section id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner" class="level3" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="modellen-gir-deg-et-estimat-men-for-en-gitt-verdi-på-legpress-hva-sier-modellen-om-i-hvilket-område-vi-kan-forvente-å-finne-nye-observasjoner"><span class="header-section-number">2.1.2</span> Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?</h3>
