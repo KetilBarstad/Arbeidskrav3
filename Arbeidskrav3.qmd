@@ -3,7 +3,7 @@ title: "Arbeidskrav 3: Regresjonsanalyse"
 author: Ketil B., Laurits H., Herman E. og Theodor S.
 date: 2025-10-30
 format:
-  html:
+  pdf:
     toc: true
     toc-location: right
     toc-title: "Innhold"
@@ -277,14 +277,14 @@ ext.m2 <- lm(legext ~ legpress + sex, data = Legext_modell)
 #Modell med kjønn som variabel, med interaksjonseffekt på legpress
 ext.m3 <- lm(legext ~ legpress + sex + sex:legpress, data = Legext_modell)
 
-#Prediksjoner innad kjønn, vi bruker ext.m2 modellen. La oss ta utgangspunkt i en legpress = 150 kg
+#Prediksjoner innad kjønn, vi bruker ext.m2 modellen. Utgangspunkt i en legpress = 150 kg
 
 pred.m2female <- predict(ext.m2, newdata = data.frame(legpress = 150,
                                       sex = "female")) 
 pred.m2male <- predict(ext.m2, newdata = data.frame(legpress = 150,
                                      sex = "male"))
 
-#Prediksjoner innad kjønn MED interaksjonseffekt. Vi bruker ext.m3 modellen.
+#Prediksjoner innad kjønn med ext.m3 modellen.
 
 pred.m3female <- predict(ext.m3, newdata = data.frame(legpress = 150,
                                      sex = "female"))
@@ -307,7 +307,7 @@ tidy(ANOVA) |>
   gt()
 ```
 
-I tabell 4 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel ser det ut til at m3 og m2 gir oss nesten identiske verdier. Vi utførte dermed en ANOVA-test mellom modell ext.m2 og ext.m3, som viste at det ikke var statistisk signifikant forskjell mellom modellene (F = 2.38, p = 0.124). Dette tyder på at effekten av legpress på legextension er tilnærmet lik mellom kjønnene, og dermed er den enklere modellen foretrukket basert på prinsippet om parsimoni (Okasha, 2016, s. 25 - 26). I modell m1, som ikke inkluderer kjønn som prediktor, får vi en prediksjonsverdi for legextension basert på legpress, uavhengig av kjønn. 
+I tabell 3 ser vi at m2 og m3 viser tydelige forskjeller i styrke i legextension mellom menn og kvinner. Dette er forventet, ettersom menn er i gjennomsnitt sterkere enn kvinner. Likevel ser det ut til at m3 og m2 gir oss nesten identiske verdier. Vi utførte dermed en ANOVA-test mellom modell ext.m2 og ext.m3, som viste at det ikke var statistisk signifikant forskjell mellom modellene (F = 2.38, p = 0.124). Dette tyder på at effekten av legpress på legextension er tilnærmet lik mellom kjønnene, og dermed er den enklere modellen foretrukket basert på prinsippet om parsimoni (Okasha, 2016, s. 25 - 26). I modell m1, som ikke inkluderer kjønn som prediktor, får vi en prediksjonsverdi for legextension basert på legpress, uavhengig av kjønn. 
 
 ### Modellen gir deg et estimat, men for en gitt verdi på legpress, hva sier modellen om i hvilket område vi kan forvente å finne nye observasjoner?
 
@@ -357,4 +357,4 @@ Vi begynte å redigere dataen og gi tallverdier. Først inkluderte vi kun “pre
 
 ### Hvordan kan vi bruke regresjonsmodellen for å si noe om populasjonen som dataene kommer fra?
 
-Vi kan bruke regresjonsmodellen for å si noe om at det er en klar tidseffekt fra pre til post tester. Observasjonene fra modellen viser oss også forskjellen mellom økning i single og multiple sets fra pre til post på modellen ser vi at økningen er større i flere sets. Forskjellen mellom single og multiple sets på baseline er ubetydelig (p=0.809).
+Vi kan tolke de ulike variabelene våre i regresjonsmodellen som følger. `Intercept` kan tolkes som den gjenomsnittlig verdien til multiplesett gruppen ved pre-test (56.9, p <0.001). Dette kan med andre ord, også tolkes som modellens beste estimat av den gjenomsnittlige verdien til populasjonen ved baseline. Forskjellen mellom single og multiple sets på baseline er ubetydelig som observert i `sets:single` (p=0.809). `time:post` viser oss endringen fra post og pre for multiple sets gruppen (32.5, p < 0.001). Den siste variabelen `sets:single*time:post`viser oss gjennomsnittlig økning i single-sett sammenlignet med multiple-sett, med en verdi på -4.4 (p = 0.110). Dette antyder at single-sett gruppen fikk i gjennomsnitt en økning som var 4.4kg mindre enn multiple sett gruppen, men denne effekten er ikke statistisk signifikant og vi kan dermed ikke etablere om det var en reell forskjell i økning mellom gruppene.  
